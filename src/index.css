@@ -131,10 +131,16 @@
 
 
 @layer components {
-  .bg-main {
+  .color-bg-main {
     @apply bg-[#2D4A43];
   }
-  .text-main {
+  .color-text-main {
     @apply text-[#2D4A43];
+  }
+  .bg-color-primary {
+    @apply bg-[#F8F9FA];
+  }
+  .bg-color-secondary {
+    @apply bg-white;
   }
 }
