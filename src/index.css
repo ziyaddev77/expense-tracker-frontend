@@ -128,3 +128,13 @@
     @apply font-sans;
     }
 }
+
+
+@layer components {
+  .bg-main {
+    @apply bg-[#2D4A43];
+  }
+  .text-main {
+    @apply text-[#2D4A43];
+  }
+}
