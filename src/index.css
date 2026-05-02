@@ -143,4 +143,8 @@
   .bg-color-second {
     @apply bg-white;
   }
+
+  .ring-color {
+    @apply ring ring-gray-400/50 shadow
+  }
 }

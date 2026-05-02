@@ -2,7 +2,9 @@
 
 function Categories() {
   return (
-    <div>Categories</div>
+    <div className="">
+      <h1>categories</h1>
+    </div>
   )
 }
 
