@@ -137,10 +137,10 @@
   .color-text-main {
     @apply text-[#2D4A43];
   }
-  .bg-color-primary {
+  .bg-color-main {
     @apply bg-[#F8F9FA];
   }
-  .bg-color-secondary {
+  .bg-color-second {
     @apply bg-white;
   }
 }

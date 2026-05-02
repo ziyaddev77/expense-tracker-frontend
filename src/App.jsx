@@ -1,7 +1,8 @@
 import { Route, Routes } from "react-router-dom";
-import { Landing, Register } from "./pages";
+import { Categories, Dashboard, Expenses, Landing, Register } from "./pages";
 import GuestRoute from "./routes/GuestRoute";
 import Login from "./pages/Login";
+import { AppLayout } from "./components";
 
 function App() {
   return (
@@ -15,6 +16,15 @@ function App() {
       </Route>
 
       {/* protected routes */}
+      <Route element={<AppLayout />}>
+          <Route index element={<Dashboard />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/expenses" element={<Expenses />} />
+          <Route path="/categories" element={<Categories />} />
+      </Route>
+
+
+
     </Routes>
   );
 }
