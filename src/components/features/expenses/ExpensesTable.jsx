@@ -1,5 +1,5 @@
 import { Pencil, Trash } from "lucide-react";
-function ExpensesTable() {
+function ExpensesTable({setOpenDeleteModal, setOpenEditModal}) {
   return (
     <table className="w-full relative">
       <thead className="bg-[#F3F4F5] sticky top-0 text-left">
@@ -20,10 +20,10 @@ function ExpensesTable() {
           <td className="pl-5 py-3 font-semibold text-black/70">20 DH</td>
           <td className="pl-5 flex items-center gap-3 py-3 font-semibold">
             <span className="cursor-pointer text-gray-500 hover:text-black transition-colors">
-              <Pencil size={17}/>
+              <Pencil onClick={setOpenEditModal} size={17}/>
             </span>
             <span className="cursor-pointer text-gray-500 hover:text-black transition-colors">
-              <Trash size={17}/>
+              <Trash onClick={setOpenDeleteModal} size={17}/>
             </span>
           </td>
         </tr>

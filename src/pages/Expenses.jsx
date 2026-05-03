@@ -11,12 +11,13 @@ import {
 } from "@/components/ui/select";
 import { Plus, Search } from "lucide-react";
 import { useState } from "react";
-import { BaseModal, CreateExpenseForm, ExpensesTable } from "../components";
+import { BaseModal, CreateExpenseForm, DeleteExpenseForm, EditExpenseForm, ExpensesTable } from "../components";
 import { Button } from "../components/ui/button";
 
 function Expenses() {
-  const [isCreateExpenseModalOpen, setIsCreateExpenseModalOpen] =
-    useState(false);
+  const [isCreateExpenseModalOpen, setIsCreateExpenseModalOpen] = useState(false);
+  const [isDeleteExpenseModalOpen, setIsDeleteExpenseModalOpen] = useState(false);
+  const [isEditExpenseModalOpen, setIsEditExpenseModalOpen] = useState(false);
 
   return (
     <div>
@@ -27,6 +28,21 @@ function Expenses() {
           />
         </BaseModal>
       )}
+      {isDeleteExpenseModalOpen && (
+        <BaseModal>
+          <DeleteExpenseForm
+            setCloseModal={() => setIsDeleteExpenseModalOpen(false)}
+          />
+        </BaseModal>
+      )}
+      {isEditExpenseModalOpen && (
+        <BaseModal>
+          <EditExpenseForm
+            setCloseModal={() => setIsEditExpenseModalOpen(false)}
+          />
+        </BaseModal>
+      )}
+
       <div className="flex items-center justify-between mb-7">
         <div>
           <h1 className="text-3xl font-semibold">Expenses</h1>
@@ -80,7 +96,7 @@ function Expenses() {
 
       {/* table content */}
       <div className="w-full min-w-0 overflow-x-auto no-scrollbar shadow rounded bg-white h-90">
-        <ExpensesTable />
+        <ExpensesTable setOpenEditModal={() => setIsEditExpenseModalOpen(true)} setOpenDeleteModal={() => setIsDeleteExpenseModalOpen(true)}/>
         {/* pagination */}
         <div className="flex items-center justify-between sticky bottom-0 bg-white p-2">
           <p className="text-xs font-bold text-stone-600">
