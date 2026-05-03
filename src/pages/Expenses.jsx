@@ -10,12 +10,23 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Plus, Search } from "lucide-react";
+import { useState } from "react";
+import { BaseModal, CreateExpenseForm, ExpensesTable } from "../components";
 import { Button } from "../components/ui/button";
-import { ExpensesTable } from "../components";
 
 function Expenses() {
+  const [isCreateExpenseModalOpen, setIsCreateExpenseModalOpen] =
+    useState(false);
+
   return (
     <div>
+      {isCreateExpenseModalOpen && (
+        <BaseModal>
+          <CreateExpenseForm
+            setCloseModal={() => setIsCreateExpenseModalOpen(false)}
+          />
+        </BaseModal>
+      )}
       <div className="flex items-center justify-between mb-7">
         <div>
           <h1 className="text-3xl font-semibold">Expenses</h1>
@@ -23,7 +34,7 @@ function Expenses() {
             Manage and track your expenses.
           </p>
         </div>
-        <Button>
+        <Button onClick={() => setIsCreateExpenseModalOpen(true)}>
           <Plus /> Add Expenses
         </Button>
       </div>
@@ -72,11 +83,17 @@ function Expenses() {
         <ExpensesTable />
         {/* pagination */}
         <div className="flex items-center justify-between sticky bottom-0 bg-white p-2">
-            <p className="text-xs font-bold text-stone-600">Showing <span>1</span> of <span>5</span> of <span>25</span> entries</p>
-            <div className="space-x-3">
-              <Button variant="outline" className={"py-4"}>Previous</Button>
-              <Button variant="outline" className={"py-4"}>Next</Button>
-            </div>
+          <p className="text-xs font-bold text-stone-600">
+            Showing <span>1</span> of <span>5</span> of <span>25</span> entries
+          </p>
+          <div className="space-x-3">
+            <Button variant="outline" className={"py-4"}>
+              Previous
+            </Button>
+            <Button variant="outline" className={"py-4"}>
+              Next
+            </Button>
+          </div>
         </div>
         {/* ==- pagination */}
       </div>
