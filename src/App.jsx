@@ -10,6 +10,7 @@ import {
 } from "./pages";
 import Login from "./pages/Login";
 import GuestRoute from "./routes/GuestRoute";
+import EmptyCategoryPage from "./components/features/categories/EmptyCategoryPage";
 
 function App() {
   return (
