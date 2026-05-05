@@ -1,5 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import { AppLayout } from "./components";
+import { AppLayout, WelcomBudgetPage } from "./components";
 import {
   Budgets,
   Categories,
@@ -28,7 +28,7 @@ function App() {
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="expenses" element={<Expenses />} />
         <Route path="categories" element={<Categories />} />
-        <Route path="budgets" element={<Budgets />} />
+        <Route path="budgets" element={<WelcomBudgetPage />} />
       </Route>
     </Routes>
   );
