@@ -11,6 +11,8 @@ import {
 import Login from "./pages/Login";
 import GuestRoute from "./routes/GuestRoute";
 import EmptyCategoryPage from "./components/features/categories/EmptyCategoryPage";
+import BudgetLimit from "./components/features/budgets/BudgetLimit";
+import BudgetSpendingAnalisis from "./components/features/budgets/BudgetSpendingAnalysis";
 
 function App() {
   return (
@@ -28,7 +30,11 @@ function App() {
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="expenses" element={<Expenses />} />
         <Route path="categories" element={<Categories />} />
-        <Route path="budgets" element={<WelcomBudgetPage />} />
+        <Route path="budgets/" element={<Budgets />} >
+            <Route index element={<Navigate to={"budget_limit"} />}/>
+            <Route path="budget_limit" element={<BudgetLimit />}/>
+            <Route path="spending_analisis" element={<BudgetSpendingAnalisis />}/>
+        </Route>
       </Route>
     </Routes>
   );

@@ -9,14 +9,14 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-[#16332D] text-primary-foreground cursor-pointer [a]:hover:bg-primary/80",
+        default: "bg-[#16332D] py-5 text-primary-foreground cursor-pointer [a]:hover:bg-primary/80",
         outline:
-          "border-border cursor-pointer bg-background cursor-pointer hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
+          "border-border py-5 cursor-pointer bg-background cursor-pointer hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
         secondary:
-          "bg-secondary cursor-pointer text-secondary-foreground hover:bg-secondary/80 aria-expanded:bg-secondary aria-expanded:text-secondary-foreground",
+          "bg-secondary py-5 cursor-pointer text-secondary-foreground hover:bg-secondary/80 aria-expanded:bg-secondary aria-expanded:text-secondary-foreground",
         ghost:
-          "hover:bg-muted cursor-pointer hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50",
-        delete:"bg-[#BA1A1A] cursor-pointer text-primary-foreground [a]:hover:bg-primary/80",
+          "hover:bg-muted py-5 cursor-pointer hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50",
+        delete:"bg-[#BA1A1A] py-5 cursor-pointer text-primary-foreground [a]:hover:bg-primary/80",
 
       },
       size: {

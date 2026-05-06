@@ -13,7 +13,7 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input"
 
 function WelcomBudgetPage() {
-    const [monthBudgetIsOpen, setMonthBudgetIsOpen] = useState(true);
+    const [monthBudgetIsOpen, setMonthBudgetIsOpen] = useState(false);
 
     return (
         <div className="h-screen flex items-center justify-center">
