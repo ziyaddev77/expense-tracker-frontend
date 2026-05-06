@@ -31,7 +31,7 @@ function Categories() {
           </p>
         </div>
         <Button onClick={() => setIsCategoryModalOpen(true)}>
-          <Plus /> Add Expenses
+          <Plus /> Create Category
         </Button>
       </div>
       {/* === header === */}
