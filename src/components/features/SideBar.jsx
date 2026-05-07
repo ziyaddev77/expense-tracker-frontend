@@ -1,14 +1,26 @@
 import { LogOut } from "lucide-react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { APP_CONFIG } from "../../config/app";
 import { NAV_LINKS } from "../../config/NavLinks";
+import { useLogout } from "../../hooks";
 
 function SideBar() {
+  const navigate = useNavigate();
+  const { logoutMutation } = useLogout();
+
+  // handle log out user
+  const handleLogout = () => {
+    logoutMutation(undefined, {
+      onSuccess: () => {
+        navigate("/welcom", { replace: true }); // ✅ go to landing page
+      },
+    });
+  };
   return (
     <aside className="w-full h-full">
       <div className="p-6">
         <Link to={"/"} className="color-text-main font-bold text-2xl">
-          {APP_CONFIG.name}    
+          {APP_CONFIG.name}
         </Link>
       </div>
       <div className="h-full relative flex flex-col justify-between">
@@ -28,8 +40,12 @@ function SideBar() {
           ))}
         </nav>
         <div className="text-sm py-3 border-t border-gray-400/80 hover:text-black absolute bottom-20 left-0 right-0 text-center text-gray-700 my-auto">
-          <span className="inline-block cursor-pointer hover:text-black">
-            <LogOut size={19} className="inline-block mr-2" /> Sign Out
+          <span onClick={handleLogout} className="inline-block cursor-pointer hover:text-black">
+            <LogOut
+              size={19}
+              className="inline-block mr-2"
+            />{" "}
+            Sign Out
           </span>
         </div>
       </div>

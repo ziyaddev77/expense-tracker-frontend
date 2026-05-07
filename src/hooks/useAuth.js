@@ -14,11 +14,14 @@ export function useGetUser() {
 
 // register a new user
 export function useRegister() {
-  const { mutate: registerMutation, isPending } = useMutation({
+  const { mutate: registerMutation, isPending, } = useMutation({
     mutationFn: (data) => authService.register(data),
     onSuccess: (data) => {
       localStorage.setItem("auth_token", data?.data?.data?.token)
     },
+    onError: (error) => {
+        console.log(error)
+    }
   });
   return { registerMutation, isPending };
 }
