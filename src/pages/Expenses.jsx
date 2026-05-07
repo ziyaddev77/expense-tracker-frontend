@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/select";
 import { Plus, Search } from "lucide-react";
 import { useState } from "react";
-import { BaseModal, CreateExpenseForm, DeleteExpenseForm, EditExpenseForm, ExpensesTable } from "../components";
+import { BaseModal, CreateExpenseForm, DeleteExpenseForm, EditExpenseForm, ExpensesTable, Loading } from "../components";
 import { Button } from "../components/ui/button";
 import { useGetExpenses } from "../hooks";
 
@@ -23,6 +23,9 @@ function Expenses() {
 
   // =============== fetch expenses =============
   const {data,isLoading} = useGetExpenses();
+
+
+
 
 
   return (

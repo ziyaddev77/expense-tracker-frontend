@@ -6,6 +6,7 @@ export function useGetExpenses({ page = 1, month = null, year = null } = {}) {
   const { data, isLoading } = useQuery({
     queryKey: ["expenses", page, month, year],
     queryFn: () => expenseService.getAll({page,month,year}),
+    select: (data) => data?.data
   });
 
   return { data, isLoading };

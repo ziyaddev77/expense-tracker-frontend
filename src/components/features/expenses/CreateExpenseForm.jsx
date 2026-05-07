@@ -9,9 +9,40 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { DollarSign, X } from "lucide-react";
+import { useState } from "react";
+import toast from "react-hot-toast";
+import { useAddExpense } from "../../../hooks";
 import { Button } from "../../ui/button";
+import { Spinner } from "../../ui/spinner";
 
 function CreateExpenseForm({ setCloseModal }) {
+  // get expense hook
+  const { addExpenseMutation, isPending } = useAddExpense();
+
+  const [expenseFromData, setExpenseFormData] = useState({
+    amount: "",
+    description: "",
+    category: "",
+  });
+  const [isSubmit, setIsSubmit] = useState(false);
+
+  // save expenses
+  const handleSaveExpense = () => {
+    setIsSubmit(true);
+    for (const [key, value] of Object.entries(expenseFromData)) {
+      if ((value === "" || value == null) && key !== "category") return;
+    }
+    addExpenseMutation(expenseFromData, {
+      onSuccess: () => {
+        toast.success("Expense added");
+        setCloseModal();
+      },
+      onError: (err) => {
+        toast.error(err?.response?.data?.message);
+      },
+    });
+  };
+
   return (
     <>
       <div className="flex w-screen border-b border-gray-300 max-w-100 items-center justify-between p-5">
@@ -19,7 +50,7 @@ function CreateExpenseForm({ setCloseModal }) {
         <X size={18} className="cursor-pointer" onClick={setCloseModal} />
       </div>
       <div>
-        <div  className="p-5">
+        <div className="p-5">
           <FieldGroup>
             <Field className="relative">
               <FieldLabel htmlFor="fieldgroup-amount">Amount</FieldLabel>
@@ -28,10 +59,28 @@ function CreateExpenseForm({ setCloseModal }) {
                 id="fieldgroup-amount"
                 className="pl-5"
                 placeholder="0.00"
+                value={expenseFromData.amount}
+                onChange={(e) =>
+                  setExpenseFormData({
+                    ...expenseFromData,
+                    amount: e.target.value
+                      ? e.target.valueAsNumber
+                      : e.target.value,
+                  })
+                }
               />
+              <p className="text-xs mt-1 text-red-500">
+                {expenseFromData.amount === "" && isSubmit
+                  ? "Amount is required"
+                  : ""}
+              </p>
               <DollarSign
                 size={16}
-                className="text-gray-400 absolute top-[60%] left-[-47%]"
+                className={`text-gray-400 absolute pointer-events-none ${
+                  expenseFromData.amount === "" && isSubmit
+                    ? "top-[41%]"
+                    : "top-[50%]"
+                }  left-[-47%]`}
               />
             </Field>
             <Field>
@@ -42,11 +91,28 @@ function CreateExpenseForm({ setCloseModal }) {
                 id="fieldgroup-Description"
                 type="text"
                 placeholder="What is this for?"
+                value={expenseFromData.description}
+                onChange={(e) =>
+                  setExpenseFormData((prev) => ({
+                    ...prev,
+                    description: e.target.value,
+                  }))
+                }
               />
+              <p className="text-xs mt-1 text-red-500">
+                {expenseFromData.description === "" && isSubmit
+                  ? "Description is required"
+                  : ""}
+              </p>
             </Field>
             <Field>
               <FieldLabel>Category</FieldLabel>
-              <Select defaultValue=" ">
+              <Select
+                value={expenseFromData.category}
+                onValueChange={(value) =>
+                  setExpenseFormData((prev) => ({ ...prev, category: value }))
+                }
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Category" />
                 </SelectTrigger>
@@ -63,11 +129,19 @@ function CreateExpenseForm({ setCloseModal }) {
             </Field>
           </FieldGroup>
         </div>
-        <div className="mt-4 py-4 border-t text-right px-4 space-x-2 border-gray-300">
-          <Button onClick={setCloseModal} variant="outline" className={"py-3"}>
+        <div className="mt-4 py-5 border-t text-right px-4 space-x-2 border-gray-300">
+          <Button onClick={setCloseModal} variant="outline" className={"py-5 min-h-7.5"}>
             Cancel
           </Button>
-          <Button className={"py-3"}>Save Expense</Button>
+          <Button onClick={handleSaveExpense} className={"py-5 w-30 min-h-7.5"}>
+            {isPending ? (
+              <span className="inline-flex w-full items-center justify-center gap-1.5">
+                <Spinner className="size-3.5" /> Saving...
+              </span>
+            ) : (
+              "Save Expense"
+            )}
+          </Button>
         </div>
       </div>
     </>
