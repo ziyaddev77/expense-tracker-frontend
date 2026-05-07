@@ -1,5 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import { AppLayout, WelcomBudgetPage } from "./components";
+import { AppLayout } from "./components";
+import BudgetLimit from "./components/features/budgets/BudgetLimit";
+import BudgetSpendingAnalisis from "./components/features/budgets/BudgetSpendingAnalysis";
 import {
   Budgets,
   Categories,
@@ -10,9 +12,7 @@ import {
 } from "./pages";
 import Login from "./pages/Login";
 import GuestRoute from "./routes/GuestRoute";
-import EmptyCategoryPage from "./components/features/categories/EmptyCategoryPage";
-import BudgetLimit from "./components/features/budgets/BudgetLimit";
-import BudgetSpendingAnalisis from "./components/features/budgets/BudgetSpendingAnalysis";
+import ProtectedRoute from "./routes/ProtectedRoute";
 
 function App() {
   return (
@@ -25,15 +25,20 @@ function App() {
       </Route>
 
       {/* protected routes */}
-      <Route path="/" element={<AppLayout />}>
-        <Route index element={<Navigate to={"dashboard"}/>} />
-        <Route path="dashboard" element={<Dashboard />} />
-        <Route path="expenses" element={<Expenses />} />
-        <Route path="categories" element={<Categories />} />
-        <Route path="budgets/" element={<Budgets />} >
-            <Route index element={<Navigate to={"budget_limit"} />}/>
-            <Route path="budget_limit" element={<BudgetLimit />}/>
-            <Route path="spending_analisis" element={<BudgetSpendingAnalisis />}/>
+      <Route element={<ProtectedRoute />}>
+        <Route path="/" element={<AppLayout />}>
+          <Route index element={<Navigate to={"dashboard"} />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="expenses" element={<Expenses />} />
+          <Route path="categories" element={<Categories />} />
+          <Route path="budgets/" element={<Budgets />}>
+            <Route index element={<Navigate to={"budget_limit"} />} />
+            <Route path="budget_limit" element={<BudgetLimit />} />
+            <Route
+              path="spending_analisis"
+              element={<BudgetSpendingAnalisis />}
+            />
+          </Route>
         </Route>
       </Route>
     </Routes>

@@ -13,11 +13,17 @@ import { Plus, Search } from "lucide-react";
 import { useState } from "react";
 import { BaseModal, CreateExpenseForm, DeleteExpenseForm, EditExpenseForm, ExpensesTable } from "../components";
 import { Button } from "../components/ui/button";
+import { useGetExpenses } from "../hooks";
 
 function Expenses() {
+  // =============== local state ================
   const [isCreateExpenseModalOpen, setIsCreateExpenseModalOpen] = useState(false);
   const [isDeleteExpenseModalOpen, setIsDeleteExpenseModalOpen] = useState(false);
   const [isEditExpenseModalOpen, setIsEditExpenseModalOpen] = useState(false);
+
+  // =============== fetch expenses =============
+  const {data,isLoading} = useGetExpenses();
+
 
   return (
     <div>

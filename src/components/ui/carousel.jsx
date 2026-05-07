@@ -64,11 +64,15 @@ function Carousel({
 
   React.useEffect(() => {
     if (!api) return
-    onSelect(api)
+
+    const syncScrollState = () => onSelect(api)
+
+    syncScrollState()
     api.on("reInit", onSelect)
     api.on("select", onSelect)
 
     return () => {
+      api?.off("reInit", onSelect)
       api?.off("select", onSelect)
     };
   }, [api, onSelect])
@@ -191,4 +195,4 @@ function CarouselNext({
   );
 }
 
-export { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext, useCarousel };
+export { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext };
