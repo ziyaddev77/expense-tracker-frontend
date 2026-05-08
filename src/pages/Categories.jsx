@@ -1,15 +1,30 @@
-import { useState } from "react"
-import { Button } from "../components/ui/button"
-import { Plus, CircleAlert, Trash } from "lucide-react"
+import { CircleAlert, Plus, Trash } from "lucide-react";
+import { useState } from "react";
 import { BaseModal, CreateCategoryForm } from "../components";
 import DeleteCategoryModal from "../components/features/categories/DeleteCategoryModal";
+import { Button } from "../components/ui/button";
+import { iconsCategories } from "../helpers/iconsCategories";
+import { useGetCategories } from "../hooks";
 
 function Categories() {
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
   const [isDeleteCategoryOpen, setIsDeleteCategoryOpen] = useState(false);
+
+  // =============== fetch categories ===============
+  const { data, isLoading } = useGetCategories();
+
+  // return an object with in the key is the name of the icon
+  // and the value is the object of icon,color,background,name
+  const iconIndex = iconsCategories.reduce((acc, category) => {
+    category.icons.forEach((icon) => {
+      acc[icon.name] = icon;
+    });
+    return acc;
+  }, {});
+
+  console.log(data);
   return (
     <div>
-
       {isCategoryModalOpen && (
         <BaseModal>
           <CreateCategoryForm setClose={() => setIsCategoryModalOpen(false)} />
@@ -18,10 +33,11 @@ function Categories() {
 
       {isDeleteCategoryOpen && (
         <BaseModal>
-          <DeleteCategoryModal setClose={() => setIsDeleteCategoryOpen(false)} />
+          <DeleteCategoryModal
+            setClose={() => setIsDeleteCategoryOpen(false)}
+          />
         </BaseModal>
       )}
-
       {/* header */}
       <div className="flex items-center justify-between mb-7">
         <div>
@@ -37,72 +53,44 @@ function Categories() {
       {/* === header === */}
       {/* categries content */}
       <div className="grid grid-cols-1 py-9 border-b border-gray-300/50 md:grid-cols-2 lg:grid-cols-3 gap-8 ">
-        <div className="ring group transition relative cursor-pointer ring-gray-300 rounded p-5 bg-white flex gap-3 items-start">
-          <span className="p-5 bg-gray-700 rounded inline-block"></span>
-          <div className="flex flex-col">
-            <span className="text-[#16332D] font-semibold">Rent</span>
-            <span className="text-[#16332D]/80 ">Monthly housing costs</span>
-          </div>
-          <Trash onClick={() => setIsDeleteCategoryOpen(true)} className="group-hover:block hidden text-red-500 absolute top-0 right-0"/>
-        </div>
-        <div className="ring ring-gray-300 rounded p-5 bg-white flex gap-3 items-start">
-          <span className="p-5 bg-gray-700 rounded inline-block"></span>
-          <div className="flex flex-col">
-            <span className="text-[#16332D] font-semibold">Rent</span>
-            <span className="text-[#16332D]/80 ">Monthly housing costs</span>
-          </div>
-        </div>  <div className="ring ring-gray-300 rounded p-5 bg-white flex gap-3 items-start">
-          <span className="p-5 bg-gray-700 rounded inline-block"></span>
-          <div className="flex flex-col">
-            <span className="text-[#16332D] font-semibold">Rent</span>
-            <span className="text-[#16332D]/80 ">Monthly housing costs</span>
-          </div>
-        </div>  <div className="ring ring-gray-300 rounded p-5 bg-white flex gap-3 items-start">
-          <span className="p-5 bg-gray-700 rounded inline-block"></span>
-          <div className="flex flex-col">
-            <span className="text-[#16332D] font-semibold">Rent</span>
-            <span className="text-[#16332D]/80 ">Monthly housing costs</span>
-          </div>
-        </div>  <div className="ring ring-gray-300 rounded p-5 bg-white flex gap-3 items-start">
-          <span className="p-5 bg-gray-700 rounded inline-block"></span>
-          <div className="flex flex-col">
-            <span className="text-[#16332D] font-semibold">Rent</span>
-            <span className="text-[#16332D]/80 ">Monthly housing costs</span>
-          </div>
-        </div>  <div className="ring ring-gray-300 rounded p-5 bg-white flex gap-3 items-start">
-          <span className="p-5 bg-gray-700 rounded inline-block"></span>
-          <div className="flex flex-col">
-            <span className="text-[#16332D] font-semibold">Rent</span>
-            <span className="text-[#16332D]/80 ">Monthly housing costs</span>
-          </div>
-        </div>  <div className="ring ring-gray-300 rounded p-5 bg-white flex gap-3 items-start">
-          <span className="p-5 bg-gray-700 rounded inline-block"></span>
-          <div className="flex flex-col">
-            <span className="text-[#16332D] font-semibold">Rent</span>
-            <span className="text-[#16332D]/80 ">Monthly housing costs</span>
-          </div>
-        </div>  <div className="ring ring-gray-300 rounded p-5 bg-white flex gap-3 items-start">
-          <span className="p-5 bg-gray-700 rounded inline-block"></span>
-          <div className="flex flex-col">
-            <span className="text-[#16332D] font-semibold">Rent</span>
-            <span className="text-[#16332D]/80 ">Monthly housing costs</span>
-          </div>
-        </div>  <div className="ring ring-gray-300 rounded p-5 bg-white flex gap-3 items-start">
-          <span className="p-5 bg-gray-700 rounded inline-block"></span>
-          <div className="flex flex-col">
-            <span className="text-[#16332D] font-semibold">Rent</span>
-            <span className="text-[#16332D]/80 ">Monthly housing costs</span>
-          </div>
-        </div>
+        {data?.data?.map((category) => {
+          const Icon = iconIndex[category?.icon];
+          console.log(Icon)
+
+          return (
+            <div
+              key={category?.id}
+              className="ring group transition relative ring-gray-300 rounded p-5 bg-white flex gap-3 items-start"
+            >
+              <span className="p-5 bg-gray-700 rounded inline-block">
+                {<Icon.icon />}
+              </span>
+              <div className="flex flex-col">
+                <span className="text-[#16332D] font-semibold">
+                  {category?.name}
+                </span>
+                <span className="text-[#16332D]/80 ">
+                  {category?.description}
+                </span>
+              </div>
+              <Trash
+                size={15}
+                onClick={() => setIsDeleteCategoryOpen(true)}
+                className="group-hover:block hidden cursor-pointer text-red-500 absolute top-2 right-2"
+              />
+            </div>
+          );
+        })}
       </div>
       {/*=== categries content ===*/}
       <div className="mt-9 text-[#16332D]/60">
-        <p className="flex items-center gap-2"><CircleAlert /> Catgories help the Budget Planner track your monthly spending limits more accurately.</p>
+        <p className="flex items-center gap-2">
+          <CircleAlert /> Catgories help the Budget Planner track your monthly
+          spending limits more accurately.
+        </p>
       </div>
-
-
     </div>
-  )
+  );
 }
 
-export default Categories
+export default Categories;
