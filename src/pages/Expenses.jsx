@@ -16,16 +16,34 @@ import { Button } from "../components/ui/button";
 import { useGetExpenses } from "../hooks";
 
 function Expenses() {
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(3);
+  
   // =============== local state ================
   const [isCreateExpenseModalOpen, setIsCreateExpenseModalOpen] = useState(false);
   const [isDeleteExpenseModalOpen, setIsDeleteExpenseModalOpen] = useState(false);
   const [isEditExpenseModalOpen, setIsEditExpenseModalOpen] = useState(false);
-
+  
   // =============== fetch expenses =============
-  const {data,isLoading} = useGetExpenses();
+  const {data,isLoading} = useGetExpenses({limit,page});
 
+  const hasNextPage = data?.meta?.current_page < data?.meta?.last_page;
+  const hasPrevPage = data?.meta?.current_page > 1;
+  
+  console.log(data)
 
-
+  // handle next page 
+  const handleNextPage = () => {
+    if(hasNextPage){
+        setPage(p => p + 1)
+    }
+  }
+  // handle next page 
+  const handlePreviousPage = () => {
+    if(hasPrevPage){
+        setPage(p => p - 1)
+    }
+  }
 
 
   return (
@@ -104,18 +122,18 @@ function Expenses() {
       {/* === search bar & filter */}
 
       {/* table content */}
-      <div className="w-full min-w-0 overflow-x-auto no-scrollbar shadow rounded bg-white h-90">
-        <ExpensesTable setOpenEditModal={() => setIsEditExpenseModalOpen(true)} setOpenDeleteModal={() => setIsDeleteExpenseModalOpen(true)}/>
+      <div className="w-full flex flex-col justify-between min-w-0 shadow rounded bg-white min-h-150">
+        <ExpensesTable expenses={data?.data} setOpenEditModal={() => setIsEditExpenseModalOpen(true)} setOpenDeleteModal={() => setIsDeleteExpenseModalOpen(true)}/>
         {/* pagination */}
-        <div className="flex items-center justify-between sticky bottom-0 bg-white p-2">
+        <div className="flex items-center justify-between bg-white p-2">
           <p className="text-xs font-bold text-stone-600">
-            Showing <span>1</span> of <span>5</span> of <span>25</span> entries
+            Showing <span>{data?.meta?.from}</span> to <span>{data?.meta?.to}</span> of <span>{data?.meta?.total}</span> entries
           </p>
           <div className="space-x-3">
-            <Button variant="outline" className={"py-4"}>
+            <Button disabled={!hasPrevPage} onClick={handlePreviousPage} variant="outline" className={"py-4"}>
               Previous
             </Button>
-            <Button variant="outline" className={"py-4"}>
+            <Button disabled={!hasNextPage} onClick={handleNextPage} variant="outline" className={"py-4"}>
               Next
             </Button>
           </div>

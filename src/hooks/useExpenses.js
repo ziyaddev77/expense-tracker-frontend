@@ -2,10 +2,10 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { expenseService } from "../services";
 
 // get all expenses
-export function useGetExpenses({ page = 1, month = null, year = null } = {}) {
+export function useGetExpenses({ page = 1, month = null, year = null, limit=5 } = {}) {
   const { data, isLoading } = useQuery({
-    queryKey: ["expenses", page, month, year],
-    queryFn: () => expenseService.getAll({page,month,year}),
+    queryKey: ["expenses", page, month, year,limit],
+    queryFn: () => expenseService.getAll({page,month,year,limit}),
     select: (data) => data?.data
   });
 

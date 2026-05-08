@@ -1,10 +1,12 @@
 import api from "./api";
 
 class ExpenseService {
-  getAll({ page, month, year } = {}) {
+  getAll({ page, month, year,limit } = {}) {
     const params = { page };
     if (month) params.month = month;
     if (year) params.year = year;
+    if (limit) params.limit = limit;
+
     return api.get("/expenses", { params });
   }
   getById(id) {

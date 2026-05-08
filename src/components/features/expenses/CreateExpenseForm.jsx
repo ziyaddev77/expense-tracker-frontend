@@ -11,7 +11,7 @@ import {
 import { DollarSign, X } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { useAddExpense } from "../../../hooks";
+import { useAddExpense, useGetExpenses } from "../../../hooks";
 import { Button } from "../../ui/button";
 import { Spinner } from "../../ui/spinner";
 
