@@ -28,7 +28,7 @@ export function useAddExpense() {
 export function useEditExpense() {
   const queryClient = useQueryClient();
   const { mutate: editExpenseMutation, isPending } = useMutation({
-    queryFn: expenseService.update,
+    mutationFn: expenseService.update,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["expenses"] });
     },
@@ -41,7 +41,7 @@ export function useEditExpense() {
 export function useDeleteExpense() {
   const queryClient = useQueryClient();
   const { mutate: deleteExpenseMutation, isPending } = useMutation({
-    queryFn: expenseService.delete,
+    mutationFn: expenseService.delete,
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["expenses"] });
     },

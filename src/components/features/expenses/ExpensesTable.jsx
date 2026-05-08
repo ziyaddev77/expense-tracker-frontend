@@ -1,6 +1,6 @@
 import { Pencil, Trash } from "lucide-react";
 import {formatDate} from "../../../helpers/formatDate"
-function ExpensesTable({ setOpenDeleteModal, setOpenEditModal, expenses }) {
+function ExpensesTable({ setOpenDeleteModal, setOpenEditModal, expenses,getEditExpenseObj }) {
   return (
     <table className="w-full h-full relative">
       <thead className="bg-[#F3F4F5] sticky top-0 text-left">
@@ -21,7 +21,7 @@ function ExpensesTable({ setOpenDeleteModal, setOpenEditModal, expenses }) {
             <td className="pl-5 py-3 font-semibold text-black/70">{expense?.relationships?.category?.name}</td>
             <td className="pl-5 py-3 font-semibold text-black/70">{expense?.attributes?.amount} DH</td>
             <td className="pl-5 flex items-center gap-3 py-3 font-semibold">
-              <span className="cursor-pointer text-gray-500 hover:text-black transition-colors">
+              <span onClick={() => getEditExpenseObj(expense)} className="cursor-pointer text-gray-500 hover:text-black transition-colors">
                 <Pencil onClick={setOpenEditModal} size={17} />
               </span>
               <span className="cursor-pointer text-gray-500 hover:text-black transition-colors">
