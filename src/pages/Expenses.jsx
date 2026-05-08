@@ -30,8 +30,8 @@ function Expenses() {
   const hasNextPage = data?.meta?.current_page < data?.meta?.last_page;
   const hasPrevPage = data?.meta?.current_page > 1;
   const [currentEditableExpense, setCurrentEditableExpense] = useState(null);
+  const [expenseId, setExpenseId] = useState(null);
   
-  console.log(data)
 
   // handle next page 
   const handleNextPage = () => {
@@ -59,6 +59,7 @@ function Expenses() {
       {isDeleteExpenseModalOpen && (
         <BaseModal>
           <DeleteExpenseForm
+           expenseId={expenseId}
             setCloseModal={() => setIsDeleteExpenseModalOpen(false)}
           />
         </BaseModal>
@@ -125,7 +126,7 @@ function Expenses() {
 
       {/* table content */}
       <div className="w-full flex flex-col justify-between min-w-0 shadow rounded bg-white min-h-150">
-        <ExpensesTable getEditExpenseObj={(data) => setCurrentEditableExpense(data)} expenses={data?.data} setOpenEditModal={() => setIsEditExpenseModalOpen(true)} setOpenDeleteModal={() => setIsDeleteExpenseModalOpen(true)}/>
+        <ExpensesTable  setExpenseId={(id) => setExpenseId(id)} getEditExpenseObj={(data) => setCurrentEditableExpense(data)} expenses={data?.data} setOpenEditModal={() => setIsEditExpenseModalOpen(true)} setOpenDeleteModal={() => setIsDeleteExpenseModalOpen(true)}/>
         {/* pagination */}
         <div className="flex items-center justify-between bg-white p-2">
           <p className="text-xs font-bold text-stone-600">
@@ -140,9 +141,9 @@ function Expenses() {
             </Button>
           </div>
         </div>
-        {/* ==- pagination */}
+        {/* === pagination === */}
       </div>
-      {/* === table content */}
+      {/* === table content === */}
     </div>
   );
 }

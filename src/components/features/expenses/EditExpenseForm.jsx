@@ -26,12 +26,11 @@ function EditExpenseForm({ setCloseModal,currentEditableExpense }) {
     date: formatDateForInput(currentEditableExpense?.attributes?.date) || "",
     description: currentEditableExpense?.attributes?.description || "",
     amount: currentEditableExpense?.attributes?.amount || "",
-    category: currentEditableExpense?.relationships?.catgory?.name || ""
+    category_id: currentEditableExpense?.relationships?.category?.id || ""
   });
   const [isSubmit, setIsSubmit] = useState(false);
 
 
-  console.log(currentEditableExpense)
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -49,8 +48,11 @@ function EditExpenseForm({ setCloseModal,currentEditableExpense }) {
     for (const field of requiredFields) {
       if (!formData[field]) return;
     }
+    const { category_id, ...rest } = formData;
+    const cleanData = category_id ? { ...rest, category_id } : rest;
+    const data = {id:currentEditableExpense?.id, data:cleanData}
 
-    editExpenseMutation({id:currentEditableExpense?.id, data: formData}, {
+    editExpenseMutation(data, {
       onSuccess: () => {
         toast.success("Edit Expense with success");
         setCloseModal();
@@ -76,7 +78,7 @@ function EditExpenseForm({ setCloseModal,currentEditableExpense }) {
             <Input type="datetime-local" id="date" name="date" value={formData.date} onChange={handleChange} />
             <p className="text-xs mt-1 text-red-500">
               {formData.date === "" && isSubmit
-                ? "Amount is required"
+                ? "Date is required"
                 : ""}
             </p>
           </Field>
@@ -95,8 +97,8 @@ function EditExpenseForm({ setCloseModal,currentEditableExpense }) {
             <Field>
               <FieldLabel>Category</FieldLabel>
               <Select
-                value={formData.category}
-                onValueChange={(value) => setFormData(prev => ({ ...prev, category: value }))}
+                value={formData.category_id}
+                onValueChange={(value) => setFormData(prev => ({ ...prev, category_id: value }))}
               >
                 <SelectTrigger className="w-full">
                   <SelectValue />

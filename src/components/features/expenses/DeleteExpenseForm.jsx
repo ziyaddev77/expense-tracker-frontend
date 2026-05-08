@@ -1,7 +1,23 @@
 import { TriangleAlert } from "lucide-react";
 import { Button } from "../../ui/button";
+import { useDeleteExpense } from "../../../hooks";
+import toast from "react-hot-toast";
 
-function DeleteExpenseForm({ setCloseModal }) {
+function DeleteExpenseForm({ setCloseModal, expenseId }) {
+  const { deleteExpenseMutation } = useDeleteExpense();
+
+  // handle delete expense
+  const handleDeleteExpense = () => {
+    deleteExpenseMutation(expenseId, {
+      onSuccess: () => {
+        toast.success("Expense deleted successfully!");
+        setCloseModal();
+      },
+      onError: (err) => {
+        toast.error(err?.response?.data?.message);
+      },
+    });
+  };
   return (
     <div className="p-6 max-w-190">
       <div className="flex items-start gap-3 mb-6">
@@ -21,7 +37,9 @@ function DeleteExpenseForm({ setCloseModal }) {
           <span className=" font-semibold text-[#5E6A66]">
             SELECTED EXPENSE
           </span>
-          <span className="text-xl font-semibold wrap-break-word">Starbucks Coffee</span>
+          <span className="text-xl font-semibold wrap-break-word">
+            Starbucks Coffee
+          </span>
         </div>
         <span className="text-xl font-semibold">5.50 DH</span>
       </div>
@@ -30,7 +48,13 @@ function DeleteExpenseForm({ setCloseModal }) {
         <Button variant="outline" onClick={setCloseModal}>
           Cancel
         </Button>
-        <Button variant="delete">Delete</Button>
+        <Button
+          onClick={handleDeleteExpense}
+          variant="delete"
+          className={"px-5"}
+        >
+          Delete
+        </Button>
       </div>
     </div>
   );
