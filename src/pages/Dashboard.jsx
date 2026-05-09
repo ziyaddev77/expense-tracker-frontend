@@ -1,4 +1,9 @@
+import { useDashboard } from "../hooks";
+
 function Dashboard() {
+  const {data} = useDashboard();
+
+  console.log(data)
   return (
     <div>
       {/* status && top categories */}

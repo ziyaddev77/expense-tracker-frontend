@@ -1,10 +1,9 @@
 import { Pencil, Trash } from "lucide-react";
 import { formatDate } from "../../../helpers/formatDate"
 function ExpensesTable({ setOpenDeleteModal, setOpenEditModal, expenses, getEditExpenseObj, setExpense }) {
-  console.log(expenses[2])
   return (
     <table className="w-full h-full relative">
-      <thead className="bg-[#F3F4F5] sticky top-0 text-left">
+      <thead className="bg-[#F3F4F5] text-left">
         <tr>
           <th className="text-gray-400 text-xs uppercase pl-5 py-2">Date</th>
           <th className="text-gray-400 text-xs uppercase pl-5 py-2">Description</th>

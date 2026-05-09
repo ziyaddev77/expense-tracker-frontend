@@ -1,9 +1,9 @@
 import { CircleAlert, Plus, Trash } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { BaseModal, CreateCategoryForm } from "../components";
 import DeleteCategoryModal from "../components/features/categories/DeleteCategoryModal";
 import { Button } from "../components/ui/button";
-import { defaultIcon, iconsCategories } from "../helpers/iconsCategories";
+import { defaultIcon } from "../helpers/iconsCategories";
 import { useGetCategories } from "../hooks";
 import { iconIndex } from "../helpers/iconsCategories";
 
@@ -55,7 +55,7 @@ function Categories() {
               className="ring group transition relative ring-gray-300 rounded p-5 bg-white flex gap-3 items-start"
             >
               <span style={{ backgroundColor: Icon.background }} className={`p-5 rounded inline-block`}>
-                <Icon.icon style={{ color: Icon.color || gray }} />
+                <Icon.icon style={{ color: Icon.color}} />
               </span>
               <div className="flex flex-col">
                 <span className="text-[#16332D] font-semibold">

@@ -17,7 +17,7 @@ import { useGetExpenses, useGetCategories } from "../hooks";
 
 function Expenses() {
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(3);
+  const [limit, setLimit] = useState(8);
 
   // =============== local state ================
   const [isCreateExpenseModalOpen, setIsCreateExpenseModalOpen] = useState(false);
@@ -148,7 +148,7 @@ function Expenses() {
       {/* === search bar & filter */}
 
       {/* table content */}
-      <div className="w-full flex flex-col justify-between min-w-0 shadow rounded bg-white min-h-150">
+      <div className="w-full flex flex-col justify-between min-w-0 shadow rounded bg-white min-h-120">
         <ExpensesTable setExpense={(data) => setExpense(data)} getEditExpenseObj={(data) => setCurrentEditableExpense(data)} expenses={filterExpense || []} setOpenEditModal={() => setIsEditExpenseModalOpen(true)} setOpenDeleteModal={() => setIsDeleteExpenseModalOpen(true)} />
         {/* pagination */}
         <div className="flex items-center justify-between bg-white p-2">
