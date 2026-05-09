@@ -1,6 +1,6 @@
 import { CircleAlert, Plus, Trash } from "lucide-react";
 import { useState } from "react";
-import { BaseModal, CreateCategoryForm } from "../components";
+import { BaseModal, CategoriesSkeleton, CreateCategoryForm } from "../components";
 import DeleteCategoryModal from "../components/features/categories/DeleteCategoryModal";
 import { Button } from "../components/ui/button";
 import { defaultIcon } from "../helpers/iconsCategories";
@@ -45,35 +45,39 @@ function Categories() {
       </div>
       {/* === header === */}
       {/* categries content */}
-      <div className="grid grid-cols-1 py-9 border-b border-gray-300/50 md:grid-cols-2 lg:grid-cols-3 gap-8 ">
-        {data?.data?.map((category) => {
-          const Icon = iconIndex[category?.icon] || defaultIcon;
+      {isLoading ? (
+        <CategoriesSkeleton />
+      ) : (
+        <div className="grid grid-cols-1 py-9 border-b border-gray-300/50 md:grid-cols-2 lg:grid-cols-3 gap-8 ">
+          {data?.data?.map((category) => {
+            const Icon = iconIndex[category?.icon] || defaultIcon;
 
-          return (
-            <div
-              key={category?.id}
-              className="ring group transition relative ring-gray-300 rounded p-5 bg-white flex gap-3 items-start"
-            >
-              <span style={{ backgroundColor: Icon.background }} className={`p-5 rounded inline-block`}>
-                <Icon.icon style={{ color: Icon.color}} />
-              </span>
-              <div className="flex flex-col">
-                <span className="text-[#16332D] font-semibold">
-                  {category?.name}
+            return (
+              <div
+                key={category?.id}
+                className="ring group transition relative ring-gray-300 rounded p-5 bg-white flex gap-3 items-start"
+              >
+                <span style={{ backgroundColor: Icon.background }} className={`p-5 rounded inline-block`}>
+                  <Icon.icon style={{ color: Icon.color}} />
                 </span>
-                <span className="text-[#16332D]/80 ">
-                  {category?.description}
-                </span>
+                <div className="flex flex-col">
+                  <span className="text-[#16332D] font-semibold">
+                    {category?.name}
+                  </span>
+                  <span className="text-[#16332D]/80 ">
+                    {category?.description}
+                  </span>
+                </div>
+                <Trash
+                  size={15}
+                  onClick={() => { setIsDeleteCategoryOpen(true), setCategory(category) }}
+                  className="group-hover:block hidden cursor-pointer text-red-500 absolute top-2 right-2"
+                />
               </div>
-              <Trash
-                size={15}
-                onClick={() => { setIsDeleteCategoryOpen(true), setCategory(category) }}
-                className="group-hover:block hidden cursor-pointer text-red-500 absolute top-2 right-2"
-              />
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      )}
       {/*=== categries content ===*/}
       <div className="mt-9 text-[#16332D]/60">
         <p className="flex items-center gap-2">

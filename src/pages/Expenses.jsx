@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/select";
 import { Plus, Search } from "lucide-react";
 import { useMemo, useState } from "react";
-import { BaseModal, CreateExpenseForm, DeleteExpenseForm, EditExpenseForm, ExpensesTable, Loading } from "../components";
+import { BaseModal, CreateExpenseForm, DeleteExpenseForm, EditExpenseForm, ExpensesTable, ExpensesSkeleton } from "../components";
 import { Button } from "../components/ui/button";
 import { useGetExpenses, useGetCategories } from "../hooks";
 
@@ -148,24 +148,28 @@ function Expenses() {
       {/* === search bar & filter */}
 
       {/* table content */}
-      <div className="w-full flex flex-col justify-between min-w-0 shadow rounded bg-white min-h-120">
-        <ExpensesTable setExpense={(data) => setExpense(data)} getEditExpenseObj={(data) => setCurrentEditableExpense(data)} expenses={filterExpense || []} setOpenEditModal={() => setIsEditExpenseModalOpen(true)} setOpenDeleteModal={() => setIsDeleteExpenseModalOpen(true)} />
-        {/* pagination */}
-        <div className="flex items-center justify-between bg-white p-2">
-          <p className="text-xs font-bold text-stone-600">
-            Showing <span>{data?.meta?.from}</span> to <span>{data?.meta?.to}</span> of <span>{data?.meta?.total}</span> entries
-          </p>
-          <div className="space-x-3">
-            <Button disabled={!hasPrevPage} onClick={handlePreviousPage} variant="outline" className={"py-4"}>
-              Previous
-            </Button>
-            <Button disabled={!hasNextPage} onClick={handleNextPage} variant="outline" className={"py-4"}>
-              Next
-            </Button>
+      {isLoading ? (
+        <ExpensesSkeleton />
+      ) : (
+        <div className="w-full flex flex-col justify-between min-w-0 shadow rounded bg-white min-h-120">
+          <ExpensesTable setExpense={(data) => setExpense(data)} getEditExpenseObj={(data) => setCurrentEditableExpense(data)} expenses={filterExpense || []} setOpenEditModal={() => setIsEditExpenseModalOpen(true)} setOpenDeleteModal={() => setIsDeleteExpenseModalOpen(true)} />
+          {/* pagination */}
+          <div className="flex items-center justify-between bg-white p-2">
+            <p className="text-xs font-bold text-stone-600">
+              Showing <span>{data?.meta?.from}</span> to <span>{data?.meta?.to}</span> of <span>{data?.meta?.total}</span> entries
+            </p>
+            <div className="space-x-3">
+              <Button disabled={!hasPrevPage} onClick={handlePreviousPage} variant="outline" className={"py-4"}>
+                Previous
+              </Button>
+              <Button disabled={!hasNextPage} onClick={handleNextPage} variant="outline" className={"py-4"}>
+                Next
+              </Button>
+            </div>
           </div>
+          {/* === pagination === */}
         </div>
-        {/* === pagination === */}
-      </div>
+      )}
       {/* === table content === */}
     </div>
   );
