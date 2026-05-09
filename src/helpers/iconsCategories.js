@@ -399,3 +399,14 @@ export const defaultIcon = {
   color: "#6B7280",
   background: "#F3F4F6",
 };
+
+
+// return an object with in the key is the name of the icon
+// and the value is the object of icon,color,background,name
+export const iconIndex =
+  iconsCategories.reduce((acc, category) => {
+    category.icons.forEach((icon) => {
+      acc[icon.name] = icon;
+    });
+    return acc;
+  }, {})

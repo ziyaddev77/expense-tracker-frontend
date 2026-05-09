@@ -1,8 +1,25 @@
 import { TriangleAlert, Trash2 } from "lucide-react"
 import { Button } from "../../ui/button"
+import { defaultIcon, iconIndex } from "../../../helpers/iconsCategories"
+import { useDeleteCategory } from "../../../hooks";
+import toast from "react-hot-toast";
 
-function DeleteCategoryModal({setClose}) {
+function DeleteCategoryModal({ setClose, category }) {
+    const Icon = iconIndex[category.icon] || defaultIcon;
+    const { deleteCategoryMutation } = useDeleteCategory();
 
+    // handle delete category 
+    const handleDeleteCategory = () => {
+        deleteCategoryMutation(category.id, {
+            onSuccess: () => {
+                toast.success("Category deleted successfully");
+                setClose();
+            },
+            onError: (err) => {
+                toast.error(err?.response?.data?.message);
+            },
+        })
+    }
 
     return (
         <div className="bg-white rounded w-screen max-w-140">
@@ -13,12 +30,12 @@ function DeleteCategoryModal({setClose}) {
                 </div>
                 <p className="text-black/80 text-sm">Are you sur you want to delete this category? this action cannot be undone.</p>
 
-                <div className="ring ring-gray-300 p-4 bg-[#EDEEEF] rounded mb-4">
+                <div className="ring ring-gray-300 p-4 bg-[#EDEEEF]/30 rounded mb-4">
                     <div className="flex items-start gap-3">
-                        <span className="p-4 rounded bg-black/80"></span>
+                        <span style={{ backgroundColor: Icon?.background }} className="p-4 rounded"><Icon.icon style={{ color: Icon?.color }} /></span>
                         <div className="flex flex-col ">
                             <span className="text-gray-400 text-sm">SELECTED CATEGORY</span>
-                            <span className="font-semibold ">Entertainment</span>
+                            <span className="font-semibold ">{category?.name}</span>
                         </div>
                     </div>
                 </div>
@@ -29,7 +46,7 @@ function DeleteCategoryModal({setClose}) {
             </div>
             <div className="py-3 border-t border-gray-300 text-end space-x-4 pr-4 bg-[#F3F4F5]">
                 <Button onClick={setClose} variant="outline">Cancel</Button>
-                <Button variant="delete" className={"px-7"}><Trash2 /> Delete</Button>
+                <Button onClick={handleDeleteCategory} variant="delete" className={"px-7"}><Trash2 /> Delete</Button>
             </div>
         </div>
     )

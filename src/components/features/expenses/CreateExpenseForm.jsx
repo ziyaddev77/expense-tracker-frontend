@@ -11,7 +11,7 @@ import {
 import { DollarSign, X } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { useAddExpense } from "../../../hooks";
+import { useAddExpense, useGetCategories } from "../../../hooks";
 import { Button } from "../../ui/button";
 import { Spinner } from "../../ui/spinner";
 
@@ -19,12 +19,17 @@ function CreateExpenseForm({ setCloseModal }) {
   // get expense hook
   const { addExpenseMutation, isPending } = useAddExpense();
 
+  // category hook
+  const { data: categories } = useGetCategories();
+
   const [expenseFromData, setExpenseFormData] = useState({
     amount: "",
     description: "",
-    category: "",
+    category_id: "",
   });
   const [isSubmit, setIsSubmit] = useState(false);
+
+
 
   // save expenses
   const handleSaveExpense = () => {
@@ -76,11 +81,10 @@ function CreateExpenseForm({ setCloseModal }) {
               </p>
               <DollarSign
                 size={16}
-                className={`text-gray-400 absolute pointer-events-none ${
-                  expenseFromData.amount === "" && isSubmit
+                className={`text-gray-400 absolute pointer-events-none ${expenseFromData.amount === "" && isSubmit
                     ? "top-[41%]"
                     : "top-[50%]"
-                }  left-[-47%]`}
+                  }  left-[-47%]`}
               />
             </Field>
             <Field>
@@ -108,9 +112,9 @@ function CreateExpenseForm({ setCloseModal }) {
             <Field>
               <FieldLabel>Category</FieldLabel>
               <Select
-                value={expenseFromData.category}
+                value={expenseFromData.category_id}
                 onValueChange={(value) =>
-                  setExpenseFormData((prev) => ({ ...prev, category: value }))
+                  setExpenseFormData((prev) => ({ ...prev, category_id: value }))
                 }
               >
                 <SelectTrigger>
@@ -118,11 +122,9 @@ function CreateExpenseForm({ setCloseModal }) {
                 </SelectTrigger>
                 <SelectContent className="z-9999">
                   <SelectGroup>
-                    <SelectItem value=" ">Select a category</SelectItem>
-                    <SelectItem value="non">none</SelectItem>
-                    <SelectItem value="transport">Transport</SelectItem>
-                    <SelectItem value="bills">Bills</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
+                    {categories?.data?.map(c => (
+                      <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
+                    ))}
                   </SelectGroup>
                 </SelectContent>
               </Select>

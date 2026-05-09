@@ -1,28 +1,20 @@
 import { CircleAlert, Plus, Trash } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { BaseModal, CreateCategoryForm } from "../components";
 import DeleteCategoryModal from "../components/features/categories/DeleteCategoryModal";
 import { Button } from "../components/ui/button";
-import { iconsCategories } from "../helpers/iconsCategories";
+import { defaultIcon, iconsCategories } from "../helpers/iconsCategories";
 import { useGetCategories } from "../hooks";
+import { iconIndex } from "../helpers/iconsCategories";
 
 function Categories() {
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
   const [isDeleteCategoryOpen, setIsDeleteCategoryOpen] = useState(false);
+  const [category, setCategory] = useState(null);
 
   // =============== fetch categories ===============
   const { data, isLoading } = useGetCategories();
 
-  // return an object with in the key is the name of the icon
-  // and the value is the object of icon,color,background,name
-  const iconIndex = iconsCategories.reduce((acc, category) => {
-    category.icons.forEach((icon) => {
-      acc[icon.name] = icon;
-    });
-    return acc;
-  }, {});
-
-  console.log(data);
   return (
     <div>
       {isCategoryModalOpen && (
@@ -34,7 +26,8 @@ function Categories() {
       {isDeleteCategoryOpen && (
         <BaseModal>
           <DeleteCategoryModal
-            setClose={() => setIsDeleteCategoryOpen(false)}
+            category={category}
+            setClose={() => {setIsDeleteCategoryOpen(false), setCategory(null)}}
           />
         </BaseModal>
       )}
@@ -54,16 +47,15 @@ function Categories() {
       {/* categries content */}
       <div className="grid grid-cols-1 py-9 border-b border-gray-300/50 md:grid-cols-2 lg:grid-cols-3 gap-8 ">
         {data?.data?.map((category) => {
-          const Icon = iconIndex[category?.icon];
-          console.log(Icon)
+          const Icon = iconIndex[category?.icon] || defaultIcon;
 
           return (
             <div
               key={category?.id}
               className="ring group transition relative ring-gray-300 rounded p-5 bg-white flex gap-3 items-start"
             >
-              <span className="p-5 bg-gray-700 rounded inline-block">
-                {<Icon.icon />}
+              <span style={{ backgroundColor: Icon.background }} className={`p-5 rounded inline-block`}>
+                <Icon.icon style={{ color: Icon.color || gray }} />
               </span>
               <div className="flex flex-col">
                 <span className="text-[#16332D] font-semibold">
@@ -75,7 +67,7 @@ function Categories() {
               </div>
               <Trash
                 size={15}
-                onClick={() => setIsDeleteCategoryOpen(true)}
+                onClick={() => { setIsDeleteCategoryOpen(true), setCategory(category) }}
                 className="group-hover:block hidden cursor-pointer text-red-500 absolute top-2 right-2"
               />
             </div>

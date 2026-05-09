@@ -10,41 +10,65 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Plus, Search } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { BaseModal, CreateExpenseForm, DeleteExpenseForm, EditExpenseForm, ExpensesTable, Loading } from "../components";
 import { Button } from "../components/ui/button";
-import { useGetExpenses } from "../hooks";
+import { useGetExpenses, useGetCategories } from "../hooks";
 
 function Expenses() {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(3);
-  
+
   // =============== local state ================
   const [isCreateExpenseModalOpen, setIsCreateExpenseModalOpen] = useState(false);
   const [isDeleteExpenseModalOpen, setIsDeleteExpenseModalOpen] = useState(false);
   const [isEditExpenseModalOpen, setIsEditExpenseModalOpen] = useState(false);
-  
-  // =============== fetch expenses =============
-  const {data,isLoading} = useGetExpenses({limit,page});
+  const [categoryState, setCategoryState] = useState("all");
+  const [search, setSearch] = useState("");
+
+  // =============== fetch expenses & categories =============
+  const { data, isLoading } = useGetExpenses({ limit, page });
+  const { data: categories } = useGetCategories();
+
+
 
   const hasNextPage = data?.meta?.current_page < data?.meta?.last_page;
   const hasPrevPage = data?.meta?.current_page > 1;
   const [currentEditableExpense, setCurrentEditableExpense] = useState(null);
-  const [expenseId, setExpenseId] = useState(null);
-  
+  const [expense, setExpense] = useState(null);
+
 
   // handle next page 
   const handleNextPage = () => {
-    if(hasNextPage){
-        setPage(p => p + 1)
+    if (hasNextPage) {
+      setPage(p => p + 1)
     }
   }
   // handle next page 
   const handlePreviousPage = () => {
-    if(hasPrevPage){
-        setPage(p => p - 1)
+    if (hasPrevPage) {
+      setPage(p => p - 1)
     }
   }
+
+  // filter
+ const filterExpense = useMemo(() => {
+  if (!data?.data) return [];
+
+  return data.data.filter((expense) => {
+    const matchesSearch =
+      search.trim() === "" ||
+      expense.attributes.description
+        .toLowerCase()
+        .includes(search.toLowerCase());
+
+    const matchesCategory =
+      categoryState.trim() === "all" ||
+      expense.relationships.category?.id === String(categoryState);
+
+    return matchesSearch && matchesCategory;
+  });
+}, [search, categoryState, data]);
 
 
   return (
@@ -59,16 +83,16 @@ function Expenses() {
       {isDeleteExpenseModalOpen && (
         <BaseModal>
           <DeleteExpenseForm
-           expenseId={expenseId}
-            setCloseModal={() => setIsDeleteExpenseModalOpen(false)}
+            expense={expense}
+            setCloseModal={() => { setIsDeleteExpenseModalOpen(false), setExpense(null) }}
           />
         </BaseModal>
       )}
       {isEditExpenseModalOpen && (
         <BaseModal>
           <EditExpenseForm
-          currentEditableExpense={currentEditableExpense}
-            setCloseModal={() => {setIsEditExpenseModalOpen(false),setCurrentEditableExpense(null)}}
+            currentEditableExpense={currentEditableExpense}
+            setCloseModal={() => { setIsEditExpenseModalOpen(false), setCurrentEditableExpense(null) }}
           />
         </BaseModal>
       )}
@@ -91,7 +115,7 @@ function Expenses() {
           <Field>
             <FieldLabel htmlFor="input-button-group">Search</FieldLabel>
             <ButtonGroup className="w-full">
-              <Input id="input-button-group" placeholder="Type to search..." />
+              <Input id="input-button-group" placeholder="Type to search..." value={search} onChange={(e) => setSearch(e.target.value)} />
               <Button
                 variant="outline"
                 className={"py-3"}
@@ -105,17 +129,16 @@ function Expenses() {
         <div className="w-full sm:w-44">
           <Field className="min-h-full">
             <FieldLabel>Category</FieldLabel>
-            <Select defaultValue="all">
+            <Select value={categoryState} onValueChange={(value) => setCategoryState(value)}>
               <SelectTrigger>
                 <SelectValue placeholder="Category" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectItem value="all">All categories</SelectItem>
-                  <SelectItem value="food">Food</SelectItem>
-                  <SelectItem value="transport">Transport</SelectItem>
-                  <SelectItem value="bills">Bills</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
+                  <SelectItem value="all">All</SelectItem>
+                  {categories?.data?.map(c => (
+                    <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
+                  ))}
                 </SelectGroup>
               </SelectContent>
             </Select>
@@ -126,7 +149,7 @@ function Expenses() {
 
       {/* table content */}
       <div className="w-full flex flex-col justify-between min-w-0 shadow rounded bg-white min-h-150">
-        <ExpensesTable  setExpenseId={(id) => setExpenseId(id)} getEditExpenseObj={(data) => setCurrentEditableExpense(data)} expenses={data?.data} setOpenEditModal={() => setIsEditExpenseModalOpen(true)} setOpenDeleteModal={() => setIsDeleteExpenseModalOpen(true)}/>
+        <ExpensesTable setExpense={(data) => setExpense(data)} getEditExpenseObj={(data) => setCurrentEditableExpense(data)} expenses={filterExpense || []} setOpenEditModal={() => setIsEditExpenseModalOpen(true)} setOpenDeleteModal={() => setIsDeleteExpenseModalOpen(true)} />
         {/* pagination */}
         <div className="flex items-center justify-between bg-white p-2">
           <p className="text-xs font-bold text-stone-600">

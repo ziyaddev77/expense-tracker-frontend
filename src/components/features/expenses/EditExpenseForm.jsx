@@ -11,15 +11,18 @@ import {
 import { DollarSign, Info, X } from "lucide-react";
 import { Button } from "../../ui/button";
 import { useState } from "react";
-import { useEditExpense } from "../../../hooks";
+import { useEditExpense, useGetCategories } from "../../../hooks";
 import toast from "react-hot-toast";
 import { formatDateForInput } from "../../../helpers/formatDateForInput";
 
 
-function EditExpenseForm({ setCloseModal,currentEditableExpense }) {
+function EditExpenseForm({ setCloseModal, currentEditableExpense }) {
 
   // get the edit expense hook
   const { editExpenseMutation } = useEditExpense();
+
+  // category hook
+  const { data: categories } = useGetCategories()
 
 
   const [formData, setFormData] = useState({
@@ -49,8 +52,10 @@ function EditExpenseForm({ setCloseModal,currentEditableExpense }) {
       if (!formData[field]) return;
     }
     const { category_id, ...rest } = formData;
-    const cleanData = category_id ? { ...rest, category_id } : rest;
-    const data = {id:currentEditableExpense?.id, data:cleanData}
+    const cleanData = { ...rest, category_id: category_id === "" ? null : category_id };
+    const data = { id: currentEditableExpense?.id, data: cleanData }
+
+    console.log("sending:", cleanData);
 
     editExpenseMutation(data, {
       onSuccess: () => {
@@ -97,18 +102,18 @@ function EditExpenseForm({ setCloseModal,currentEditableExpense }) {
             <Field>
               <FieldLabel>Category</FieldLabel>
               <Select
-                value={formData.category_id}
-                onValueChange={(value) => setFormData(prev => ({ ...prev, category_id: value }))}
+                value={formData.category_id || "none"}
+                onValueChange={(value) => setFormData(prev => ({ ...prev, category_id: value === "none" ? "" : value }))}
               >
                 <SelectTrigger className="w-full">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="z-9999">
                   <SelectGroup>
-                    <SelectItem value="non">None</SelectItem>
-                    <SelectItem value="transport">Transport</SelectItem>
-                    <SelectItem value="bills">Bills</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
+                    <SelectItem value="none">None</SelectItem>
+                    {categories?.data?.map(c => (
+                      <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
+                    ))}
                   </SelectGroup>
                 </SelectContent>
               </Select>

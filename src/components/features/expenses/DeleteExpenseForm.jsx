@@ -3,12 +3,12 @@ import { Button } from "../../ui/button";
 import { useDeleteExpense } from "../../../hooks";
 import toast from "react-hot-toast";
 
-function DeleteExpenseForm({ setCloseModal, expenseId }) {
+function DeleteExpenseForm({ setCloseModal, expense }) {
   const { deleteExpenseMutation } = useDeleteExpense();
-
+ 
   // handle delete expense
   const handleDeleteExpense = () => {
-    deleteExpenseMutation(expenseId, {
+    deleteExpenseMutation(expense?.id, {
       onSuccess: () => {
         toast.success("Expense deleted successfully!");
         setCloseModal();
@@ -38,10 +38,10 @@ function DeleteExpenseForm({ setCloseModal, expenseId }) {
             SELECTED EXPENSE
           </span>
           <span className="text-xl font-semibold wrap-break-word">
-            Starbucks Coffee
+           {expense?.description}
           </span>
         </div>
-        <span className="text-xl font-semibold">5.50 DH</span>
+        <span className="text-xl font-semibold">{expense?.amount} DH</span>
       </div>
 
       <div className="text-right space-x-3">
