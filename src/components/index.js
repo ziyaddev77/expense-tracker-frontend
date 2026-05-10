@@ -15,3 +15,6 @@ export { default as Loading } from "./features/Loading";
 export { default as ExpensesSkeleton } from "./features/expenses/ExpensesSkeleton";
 export { default as SideBar } from "./features/SideBar";
 export { default as AppLayout } from "./layout/AppLayout";
+export {default as SetBudgetModal} from "./features/budgets/SetBudgetModal";
+export { default as BudgetLimitSkeleton } from "./features/budgets/BudgetLimitSkeleton";
+export { default as BudgetPageSkeleton } from "./features/budgets/BudgetPageSkeleton";
