@@ -1,7 +1,12 @@
 import { useNavigate } from "react-router-dom";
-import { CategoryBudgetCard, DashboardSkeleton, NoBudgetSet, RecentExpenses } from "../components";
-import { useDashboard } from "../hooks";
+import {
+  CategoryBudgetCard,
+  DashboardSkeleton,
+  NoBudgetSet,
+  RecentExpenses,
+} from "../components";
 import WeeklyActivityChart from "../components/features/dashboard/WeeklyActivityChart";
+import { useDashboard } from "../hooks";
 
 function Dashboard() {
   const { data, isLoading } = useDashboard();
@@ -9,11 +14,14 @@ function Dashboard() {
   const navigate = useNavigate();
 
   const calcTotalSpentInPourcentage = () => {
-    return Math.min((data?.total_spent / data?.total_budget) * 100, 100).toFixed(0);
+    return Math.min(
+      (data?.total_spent / data?.total_budget) * 100,
+      100,
+    ).toFixed(0);
   };
 
   const totalSpent = calcTotalSpentInPourcentage();
-  console.log(data)
+  console.log(data);
 
   if (isLoading) return <DashboardSkeleton />;
   return (
@@ -22,7 +30,9 @@ function Dashboard() {
       <div className="flex items-start gap-7 mb-7">
         {/* status */}
         {data?.total_budget === 0 ? (
-          <NoBudgetSet />
+          <NoBudgetSet title={"Month"} monthlyBudget={true}>
+            Take control of your finances by setting a monthly limit. We'll help you track  every expense.
+          </NoBudgetSet>
         ) : (
           <div className="rounded-md ring space-y-7 ring-gray-400/70 shadow p-5 flex-1">
             <div className="flex items-center justify-between">
@@ -99,7 +109,10 @@ function Dashboard() {
 
       <div className="flex items-start justify-between gap-7">
         <WeeklyActivityChart />
-       <RecentExpenses expenses={data?.recent_expenses} onViewAll={() => navigate('/expenses')}/>
+        <RecentExpenses
+          expenses={data?.recent_expenses}
+          onViewAll={() => navigate("/expenses")}
+        />
       </div>
     </div>
   );

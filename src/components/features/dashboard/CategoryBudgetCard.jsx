@@ -15,7 +15,7 @@ const CategoryBudgetCard = ({ category }) => {
         </div>
         {hasBudget ? (
           <span className="font-medium text-gray-800">
-            ${category.total_spent?.toFixed(2)}
+            ${Number(category.total_spent || 0).toFixed(2)}
           </span>
         ) : (
           <span className="text-sm italic text-gray-400">Budget not set</span>

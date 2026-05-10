@@ -11,7 +11,6 @@ const WeeklyActivityChart = () => {
 
   const {data,isLoading} = useWeeklyActivityChart();
 
-  console.log(data)
 
 
   useEffect(() => {
