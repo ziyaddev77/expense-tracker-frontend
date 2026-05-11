@@ -1,10 +1,9 @@
 import { defaultIcon, iconIndex } from "../../../helpers/iconsCategories";
-import { useGetBudgets } from "../../../hooks";
 import NoBudgetSet from "../dashboard/NoBudgetSet";
 import BudgetLimitSkeleton from "./BudgetLimitSkeleton";
 
-function BudgetLimit() {
-  const { data: budgets, isLoading } = useGetBudgets();
+function BudgetLimit({budgets,isLoading}) {
+  
 
   const progressSpendBar = (b) =>
     Math.min(
@@ -21,6 +20,7 @@ function BudgetLimit() {
       {budgets?.length !== 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {budgets?.map((b) => {
+            if (b?.relationships?.category === null) return null;
             const Icon =
               iconIndex[b?.relationships?.category?.icon] || defaultIcon;
 
@@ -52,7 +52,7 @@ function BudgetLimit() {
                   <span
                     className={`${progressSpendBar(b) >= 100 ? "text-[#BA1A1A]" : progressSpendBar(b) >= 85 ? "text-orange-400" : ""}`}
                   >
-                    Usage: {progressSpendBar(b).toFixed(1)}%
+                    Usage: {progressSpendBar(b).toFixed(0)}%
                   </span>
                   <span className="text-sm">
                     {b?.attributes?.total_expenses} DH / {b?.attributes?.amount}{" "}

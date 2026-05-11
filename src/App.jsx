@@ -34,14 +34,7 @@ function App() {
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="expenses" element={<Expenses />} />
             <Route path="categories" element={<Categories />} />
-            <Route path="budgets/" element={<Budgets />}>
-              <Route index element={<Navigate to={"budget_limit"} />} />
-              <Route path="budget_limit" element={<BudgetLimit />} />
-              <Route
-                path="spending_analisis"
-                element={<BudgetSpendingAnalisis />}
-              />
-            </Route>
+            <Route path="budgets" element={<Budgets />} />
           </Route>
         </Route>
       </Routes>

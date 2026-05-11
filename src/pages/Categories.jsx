@@ -1,11 +1,14 @@
 import { CircleAlert, Plus, Trash } from "lucide-react";
 import { useState } from "react";
-import { BaseModal, CategoriesSkeleton, CreateCategoryForm } from "../components";
+import {
+  BaseModal,
+  CategoriesSkeleton,
+  CreateCategoryForm,
+} from "../components";
 import DeleteCategoryModal from "../components/features/categories/DeleteCategoryModal";
 import { Button } from "../components/ui/button";
-import { defaultIcon } from "../helpers/iconsCategories";
+import { defaultIcon, iconIndex } from "../helpers/iconsCategories";
 import { useGetCategories } from "../hooks";
-import { iconIndex } from "../helpers/iconsCategories";
 
 function Categories() {
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
@@ -27,7 +30,9 @@ function Categories() {
         <BaseModal>
           <DeleteCategoryModal
             category={category}
-            setClose={() => {setIsDeleteCategoryOpen(false), setCategory(null)}}
+            setClose={() => {
+              (setIsDeleteCategoryOpen(false), setCategory(null));
+            }}
           />
         </BaseModal>
       )}
@@ -57,8 +62,11 @@ function Categories() {
                 key={category?.id}
                 className="ring group transition relative ring-gray-300 rounded p-5 bg-white flex gap-3 items-start"
               >
-                <span style={{ backgroundColor: Icon.background }} className={`p-5 rounded inline-block`}>
-                  <Icon.icon style={{ color: Icon.color}} />
+                <span
+                  style={{ backgroundColor: Icon.background }}
+                  className={`p-3 rounded inline-block`}
+                >
+                  <Icon.icon style={{ color: Icon.color }} />
                 </span>
                 <div className="flex flex-col">
                   <span className="text-[#16332D] font-semibold">
@@ -68,11 +76,15 @@ function Categories() {
                     {category?.description}
                   </span>
                 </div>
-                <Trash
-                  size={15}
-                  onClick={() => { setIsDeleteCategoryOpen(true), setCategory(category) }}
-                  className="group-hover:block hidden cursor-pointer text-red-500 absolute top-2 right-2"
-                />
+                <span className="hover:bg-red-200 transition-colors absolute rounded p-1 top-2 right-2">
+                  <Trash
+                    size={15}
+                    onClick={() => {
+                      (setIsDeleteCategoryOpen(true), setCategory(category));
+                    }}
+                    className="group-hover:block hidden cursor-pointer text-red-500 "
+                  />
+                </span>
               </div>
             );
           })}
