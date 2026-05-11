@@ -13,15 +13,48 @@ function Dashboard() {
 
   const navigate = useNavigate();
 
+  const handleSetCategoryBudget = (category) => {
+    navigate("/budgets", {
+      state: {
+        categoryId: category?.id,
+        openBudgetModal: true,
+      },
+    });
+  };
+
   const calcTotalSpentInPourcentage = () => {
-    return Math.min(
-      (data?.total_spent / data?.total_budget) * 100,
-      100,
-    ).toFixed(0);
+    const totalBudget = Number(data?.total_budget || 0);
+    const totalSpent = Number(data?.total_spent || 0);
+
+    if (totalBudget === 0) return 0;
+
+    return (totalSpent / totalBudget) * 100;
   };
 
   const totalSpent = calcTotalSpentInPourcentage();
-  console.log(data);
+  const totalSpentDisplay = totalSpent.toFixed(0);
+  const progressWidth = Math.min(totalSpent, 100);
+  const budgetHealth =
+    totalSpent >= 100
+      ? {
+          message: "Over Budget",
+          textColor: "text-[#BA1A1A]",
+          barColor: "bg-[#BA1A1A]",
+          badgeColor: "bg-red-100 text-[#BA1A1A]",
+        }
+      : totalSpent > 85
+        ? {
+            message: "Close to Limit",
+            textColor: "text-orange-500",
+            barColor: "bg-orange-400",
+            badgeColor: "bg-orange-100 text-orange-600",
+          }
+        : {
+            message: "Good Standing",
+            textColor: "text-[#16332D]",
+            barColor: "bg-[#16332D]",
+            badgeColor: "bg-[#D6E2DD] text-[#5B6763]",
+          };
 
   if (isLoading) return <DashboardSkeleton />;
   return (
@@ -44,8 +77,10 @@ function Dashboard() {
                   Your Status for Mars 2026
                 </p>
               </div>
-              <span className="text-[10px] p-1 rounded-full bg-[#D6E2DD] text-[#5B6763]">
-                {totalSpent}% USED
+              <span
+                className={`text-[10px] p-1 rounded-full ${budgetHealth.badgeColor}`}
+              >
+                {totalSpentDisplay}% USED
               </span>
             </div>
             <div className="flex items-center justify-between">
@@ -78,14 +113,14 @@ function Dashboard() {
             <div>
               <div className="flex text-sm items-center justify-between">
                 <span className="font-semibold text-black">Budget Health</span>
-                <span className="font-semibold text-gray-500">
-                  Good Standing
+                <span className={`font-semibold ${budgetHealth.textColor}`}>
+                  {budgetHealth.message}
                 </span>
               </div>
               <div className="rounded-lg overflow-hidden h-4 mt-4 bg-gray-200">
                 <div
-                  style={{ width: `${totalSpent}%` }}
-                  className="rounded-xl h-full bg-[#16332D]"
+                  style={{ width: `${progressWidth}%` }}
+                  className={`rounded-xl h-full ${budgetHealth.barColor}`}
                 ></div>
               </div>
             </div>
@@ -98,7 +133,11 @@ function Dashboard() {
           <div className="space-y-1">
             {/* category */}
             {data?.top_categories?.map((c) => (
-              <CategoryBudgetCard category={c} key={c.id} />
+              <CategoryBudgetCard
+                category={c}
+                key={c.id}
+                onSetBudget={handleSetCategoryBudget}
+              />
             ))}
             {/* category */}
           </div>

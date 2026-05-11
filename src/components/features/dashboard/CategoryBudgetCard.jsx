@@ -1,7 +1,17 @@
 import { iconIndex } from "../../../helpers/iconsCategories";
 
-const CategoryBudgetCard = ({ category }) => {
-  const hasBudget = !!category?.total_budget;
+const CategoryBudgetCard = ({ category, onSetBudget }) => {
+  const totalBudget = Number(category?.total_budget || 0);
+  const totalSpent = Number(category?.total_spent || 0);
+  const hasBudget = totalBudget > 0;
+  const usagePercentage = hasBudget ? (totalSpent / totalBudget) * 100 : 0;
+  const progressWidth = Math.min(usagePercentage, 100);
+  const progressColor =
+    usagePercentage >= 100
+      ? "bg-[#BA1A1A]"
+      : usagePercentage >= 85
+        ? "bg-orange-400"
+        : "bg-[#16332D]";
 
   const Icon = iconIndex[category?.icon];
 
@@ -15,7 +25,7 @@ const CategoryBudgetCard = ({ category }) => {
         </div>
         {hasBudget ? (
           <span className="font-medium text-gray-800">
-            ${Number(category.total_spent || 0).toFixed(2)}
+            {totalSpent.toFixed(2)} DH
           </span>
         ) : (
           <span className="text-sm italic text-gray-400">Budget not set</span>
@@ -26,9 +36,9 @@ const CategoryBudgetCard = ({ category }) => {
       {hasBudget ? (
         <div className="h-2 w-full rounded-full bg-gray-200">
           <div
-            className="h-2 rounded-full bg-green-600"
+            className={`h-2 rounded-full ${progressColor}`}
             style={{
-              width: `${Math.min((category?.total_budget / category?.total_spent) * 100, 100)}%`,
+              width: `${progressWidth}%`,
             }}
           />
         </div>
@@ -37,7 +47,10 @@ const CategoryBudgetCard = ({ category }) => {
           <span className="text-sm text-gray-400 truncate max-w-45">
             {category.description}
           </span>
-          <button className="text-sm font-semibold cursor-pointer text-green-600">
+          <button
+            onClick={() => onSetBudget?.(category)}
+            className="text-sm font-semibold cursor-pointer text-green-600"
+          >
             Set budget
           </button>
         </div>
