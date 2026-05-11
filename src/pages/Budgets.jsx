@@ -16,9 +16,9 @@ function Budgets() {
   const { addBudgetMutation } = useAddBudget();
   const { data: dashboard, isLoading: isDashboardLoading } = useDashboard();
 
-  const totalBudget = dashboard?.total_budget ?? 0;
-  const allocated = dashboard?.allocated ?? 0;
-  const remaining = dashboard?.remaining ?? 0;
+  const totalBudget = Number(dashboard?.total_budget ?? 0);
+  const allocated = Number(dashboard?.allocated ?? 0);
+  const remaining = Math.max(totalBudget - allocated, 0);
 
 
   // handle save budget limit
