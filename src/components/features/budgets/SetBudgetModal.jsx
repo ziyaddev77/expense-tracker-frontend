@@ -15,13 +15,26 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const SetBudgetModal = ({ open, onClose, categories = [], onSave }) => {
+const SetBudgetModal = ({
+  open,
+  onClose,
+  categories = [],
+  onSave,
+  initialCategoryId = "",
+}) => {
   const [categoryId, setCategoryId] = useState("");
   const [amount, setAmount] = useState("");
 
   const isValid = categoryId && amount;
+
+  useEffect(() => {
+    if (!open) return;
+
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setCategoryId(initialCategoryId);
+  }, [initialCategoryId, open]);
 
   const handleSave = () => {
     if (!isValid) return;
@@ -35,6 +48,8 @@ const SetBudgetModal = ({ open, onClose, categories = [], onSave }) => {
     setCategoryId("");
     setAmount("");
   };
+
+  // console.log(categories)
 
   return (
     <Dialog open={open} onOpenChange={onClose}>

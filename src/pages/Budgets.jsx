@@ -1,25 +1,48 @@
 import { CircleCheckBig, DollarSign, Plus, Wallet } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { Outlet, useNavigate } from "react-router-dom";
-import { SetBudgetModal, WelcomBudgetPage, BudgetPageSkeleton } from "../components";
+import { useLocation, useNavigate } from "react-router-dom";
+import {
+  BudgetPageSkeleton,
+  SetBudgetModal,
+  WelcomBudgetPage,
+} from "../components";
+import BudgetLimit from "../components/features/budgets/BudgetLimit";
+import BudgetSpendingAnalisis from "../components/features/budgets/BudgetSpendingAnalysis";
 import { Button } from "../components/ui/button";
-import { useAddBudget, useGetCategories, useDashboard } from "../hooks";
+import {
+  useAddBudget,
+  useDashboard,
+  useGetCategories,
+  useGetBudgets,
+} from "../hooks";
+
 
 function Budgets() {
   const [navTitle, setNavTitle] = useState("budget_limit");
-  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [selectedCategoryId, setSelectedCategoryId] = useState("");
+  const location = useLocation();
+  const navigate = useNavigate();
 
   // ============= fetch ============
-  const { data } = useGetCategories();
+  const { data:categories } = useGetCategories();
   const { addBudgetMutation } = useAddBudget();
-  const { data: dashboard, isLoading: isDashboardLoading } = useDashboard();
+  const { data: dashboard, isLoading } = useDashboard();
+  const { data: budgets, isLoading:isBudgetLoading } = useGetBudgets();
 
   const totalBudget = Number(dashboard?.total_budget ?? 0);
   const allocated = Number(dashboard?.allocated ?? 0);
   const remaining = Math.max(totalBudget - allocated, 0);
 
+  useEffect(() => {
+    if (!location.state?.openBudgetModal) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setNavTitle("budget_limit");
+    setSelectedCategoryId(String(location.state.categoryId ?? ""));
+    setOpen(true);
+    navigate(".", { replace: true, state: null });
+  }, [location.state, navigate]);
 
   // handle save budget limit
   const handleSave = (data) => {
@@ -27,13 +50,24 @@ function Budgets() {
       onSuccess: () => {
         toast.success("Budget saved successfully!");
         setOpen(false);
+        setSelectedCategoryId("");
       },
       onError: (err) => {
         toast.error(err?.response?.data?.message);
       },
     });
   };
-  if (isDashboardLoading) return <BudgetPageSkeleton />;
+
+  // get all the ids of the budget categories
+  const budgetedCategoryIds = budgets?.map(b => b?.relationships?.category?.id)?.filter(Boolean);
+  /**
+   * get only the categories where not in the budget category ids array 
+   * so we clear that we get only the category that have not budget.
+   */
+  const availableCategories = categories?.data?.filter(cat => !budgetedCategoryIds?.includes(cat?.id))
+
+
+  if (isLoading) return <BudgetPageSkeleton />;
 
   return totalBudget === 0 ? (
     <WelcomBudgetPage />
@@ -42,8 +76,12 @@ function Budgets() {
       <SetBudgetModal
         onSave={(data) => handleSave(data)}
         open={open}
-        categories={data?.data}
-        onClose={() => setOpen(false)}
+        categories={availableCategories}
+        initialCategoryId={selectedCategoryId}
+        onClose={() => {
+          setOpen(false);
+          setSelectedCategoryId("");
+        }}
       />
       {/* generate statistic */}
       <div className="bg-white ring ring-gray-300 shadow p-5 rounded mb-10">
@@ -56,12 +94,12 @@ function Budgets() {
             </p>
             <span className="inline-block mt-7 mb-2">Total Monthly Budget</span>
             <div className="relative">
-                <input
-                  type="text"
-                  disabled
-                  className="py-2 pl-6 ring text-lg ring-gray-400 rounded "
-                  value={totalBudget}
-                />
+              <input
+                type="text"
+                disabled
+                className="py-2 pl-6 ring text-lg ring-gray-400 rounded "
+                value={totalBudget}
+              />
               <DollarSign
                 size={15}
                 className="absolute text-gray-500 top-3.5 left-1"
@@ -72,12 +110,12 @@ function Budgets() {
             <div className="bg-[#F3F4F5] p-7 w-full ring ring-gray-400/60 min-w-50 h-40 rounded-md flex gap-3 flex-col">
               <Wallet size={30} />
               <span>ALLOCATED</span>
-                <span className="text-2xl text-[#16332D]">{allocated} DH</span>
+              <span className="text-2xl text-[#16332D]">{allocated} DH</span>
             </div>
             <div className="bg-[#F5FEFA] p-7 w-full ring ring-[#D1FAE5] min-w-50 h-40 rounded-md flex gap-3 flex-col">
               <CircleCheckBig className="text-[#197857]" size={30} />
               <span className="text-[#197857]">REMAINING</span>
-                <span className="text-2xl text-[#1F5F4E]">{remaining} DH</span>
+              <span className="text-2xl text-[#1F5F4E]">{remaining} DH</span>
             </div>
           </div>
         </div>
@@ -92,7 +130,12 @@ function Budgets() {
             Manage your monthly spending limits and stay on track.
           </p>
         </div>
-        <Button onClick={() => setOpen(true)}>
+        <Button
+          onClick={() => {
+            setSelectedCategoryId("");
+            setOpen(true);
+          }}
+        >
           <Plus /> Create New Budget
         </Button>
       </div>
@@ -102,17 +145,13 @@ function Budgets() {
       <div>
         <div className="border-b border-gray-300 space-x-4">
           <span
-            onClick={() => {
-              (navigate("budget_limit"), setNavTitle("budget_limit"));
-            }}
+            onClick={() => setNavTitle("budget_limit")}
             className={`inline-block py-3 border-b-3 ${navTitle === "budget_limit" ? "border-green-700 text-[#16332D]" : "text-gray-500 border-transparent"}  cursor-pointer`}
           >
             Budget Limits
           </span>
           <span
-            onClick={() => {
-              (navigate("spending_analisis"), setNavTitle("spending_analisis"));
-            }}
+            onClick={() => setNavTitle("spending_analisis")}
             className={`inline-block py-3 ${navTitle !== "budget_limit" ? "border-green-700 text-[#16332D]" : "text-gray-500 border-transparent"} border-b-3  cursor-pointer`}
           >
             Spending Analysis
@@ -122,7 +161,11 @@ function Budgets() {
       {/* === budget section navigation */}
 
       {/* budget content */}
-      <Outlet />
+      {navTitle === "budget_limit" ? (
+        <BudgetLimit budgets={budgets} isLoading={isBudgetLoading}/>
+      ) : (
+        <BudgetSpendingAnalisis />
+      )}
       {/* === budget content === */}
     </div>
   );
