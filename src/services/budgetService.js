@@ -10,7 +10,7 @@ class BudgetService {
   create(data) {
     return api.post(`/budgets`, data);
   }
-  update({ id, data }) {
+  update( id, data ) {
     return api.put(`/budgets/${id}`, data);
   }
   delete(id) {

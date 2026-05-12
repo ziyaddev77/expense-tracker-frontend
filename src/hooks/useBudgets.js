@@ -20,6 +20,7 @@ export function useAddBudget() {
     mutationFn: budgetService.create,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["budgets"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard"] });
     },
   });
 
@@ -31,9 +32,10 @@ export function useEditBudget() {
   const queryClient = useQueryClient();
 
   const { mutate: editBudgetMutation, isPending } = useMutation({
-    mutationFn: budgetService.update,
+    mutationFn: ({ id, data }) => budgetService.update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["budgets"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard"] });
     },
   });
 
@@ -48,6 +50,7 @@ export function useDeleteBudget() {
     mutationFn: budgetService.delete,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["budgets"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard"] });
     },
   });
 
