@@ -1,8 +1,6 @@
 import { Toaster } from "react-hot-toast";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AppLayout } from "./components";
-import BudgetLimit from "./components/features/budgets/BudgetLimit";
-import BudgetSpendingAnalisis from "./components/features/budgets/BudgetSpendingAnalysis";
 import {
   Budgets,
   Categories,

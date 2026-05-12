@@ -164,7 +164,7 @@ function Budgets() {
       {navTitle === "budget_limit" ? (
         <BudgetLimit budgets={budgets} isLoading={isBudgetLoading}/>
       ) : (
-        <BudgetSpendingAnalisis />
+        <BudgetSpendingAnalisis budgets={budgets} isLoading={isBudgetLoading} />
       )}
       {/* === budget content === */}
     </div>

@@ -60,14 +60,14 @@ function Dashboard() {
   return (
     <div>
       {/* status && top categories */}
-      <div className="flex items-start gap-7 mb-7">
+      <div className="flex items-start flex-col lg:flex-row gap-7 mb-7">
         {/* status */}
         {data?.total_budget === 0 ? (
           <NoBudgetSet title={"Month"} monthlyBudget={true}>
             Take control of your finances by setting a monthly limit. We'll help you track  every expense.
           </NoBudgetSet>
         ) : (
-          <div className="rounded-md ring space-y-7 ring-gray-400/70 shadow p-5 flex-1">
+          <div className="rounded-md ring w-90 md:w-150 space-y-7 ring-gray-400/70 shadow p-5 flex-1">
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-xl font-semibold">
@@ -130,6 +130,7 @@ function Dashboard() {
         {/* top categories */}
         <div className="rounded-md ring ring-gray-400/70 w-80 shadow p-5">
           <h1 className="text-xl font-semibold">Top Categories</h1>
+          {data?.top_categories?.length ? (
           <div className="space-y-1">
             {/* category */}
             {data?.top_categories?.map((c) => (
@@ -141,12 +142,18 @@ function Dashboard() {
             ))}
             {/* category */}
           </div>
+
+          ) : (
+            <div className="h-20 flex items-center justify-center">
+                <span className="text-sm text-gray-400">No Categories yet</span>
+            </div>
+          )}
         </div>
         {/* === top categories === */}
       </div>
       {/* ==== status && top categories === */}
 
-      <div className="flex items-start justify-between gap-7">
+      <div className="flex items-start flex-wrap lg:flex-nowrap justify-between gap-7">
         <WeeklyActivityChart />
         <RecentExpenses
           expenses={data?.recent_expenses}

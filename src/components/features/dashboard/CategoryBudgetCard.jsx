@@ -1,4 +1,5 @@
-import { iconIndex } from "../../../helpers/iconsCategories";
+import { defaultIcon, iconIndex } from "../../../helpers/iconsCategories";
+
 
 const CategoryBudgetCard = ({ category, onSetBudget }) => {
   const totalBudget = Number(category?.total_budget || 0);
@@ -13,7 +14,7 @@ const CategoryBudgetCard = ({ category, onSetBudget }) => {
         ? "bg-orange-400"
         : "bg-[#16332D]";
 
-  const Icon = iconIndex[category?.icon];
+  const Icon = iconIndex[category?.icon] || defaultIcon;
 
   return (
     <div className="flex flex-col py-2">

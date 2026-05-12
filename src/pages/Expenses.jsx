@@ -17,7 +17,7 @@ import { useGetExpenses, useGetCategories } from "../hooks";
 
 function Expenses() {
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(8);
+  const limit = 8;
 
   // =============== local state ================
   const [isCreateExpenseModalOpen, setIsCreateExpenseModalOpen] = useState(false);
