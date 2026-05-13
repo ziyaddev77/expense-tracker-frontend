@@ -3,16 +3,16 @@ import { iconIndex } from "../../../helpers/iconsCategories";
 
 
 const RecentExpenseItem = ({ expense }) => {
-  const iconData = iconIndex[expense.category.icon] ?? defaultIcon;
+  const iconData = iconIndex[expense?.category?.icon] ?? defaultIcon;
 
   const Icon = iconData.icon;
 
-  const formattedDate = new Date(expense.date).toLocaleDateString("en-US", {
+  const formattedDate = new Date(expense?.date).toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
   });
 
-  const formattedTime = new Date(expense.date).toLocaleTimeString("en-US", {
+  const formattedTime = new Date(expense?.date).toLocaleTimeString("en-US", {
     hour: "2-digit",
     minute: "2-digit",
   });
@@ -39,7 +39,7 @@ const RecentExpenseItem = ({ expense }) => {
 
       {/* Amount */}
       <span className="font-semibold text-sm text-red-500">
-        -${parseFloat(expense.amount).toFixed(2)}
+        -${parseFloat(expense?.amount).toFixed(2)}
       </span>
     </div>
   );

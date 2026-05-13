@@ -29,13 +29,11 @@ function CreateExpenseForm({ setCloseModal }) {
   });
   const [isSubmit, setIsSubmit] = useState(false);
 
-
-
   // save expenses
   const handleSaveExpense = () => {
     setIsSubmit(true);
     for (const [key, value] of Object.entries(expenseFromData)) {
-      if ((value === "" || value == null) && key !== "category") return;
+      if ((value === "" || value == null) && key !== "category_id") return;
     }
     addExpenseMutation(expenseFromData, {
       onSuccess: () => {
@@ -81,10 +79,11 @@ function CreateExpenseForm({ setCloseModal }) {
               </p>
               <DollarSign
                 size={16}
-                className={`text-gray-400 absolute pointer-events-none ${expenseFromData.amount === "" && isSubmit
+                className={`text-gray-400 absolute pointer-events-none ${
+                  expenseFromData.amount === "" && isSubmit
                     ? "top-[41%]"
                     : "top-[50%]"
-                  }  left-[-47%]`}
+                }  left-[-47%]`}
               />
             </Field>
             <Field>
@@ -114,7 +113,10 @@ function CreateExpenseForm({ setCloseModal }) {
               <Select
                 value={expenseFromData.category_id}
                 onValueChange={(value) =>
-                  setExpenseFormData((prev) => ({ ...prev, category_id: value }))
+                  setExpenseFormData((prev) => ({
+                    ...prev,
+                    category_id: value,
+                  }))
                 }
               >
                 <SelectTrigger>
@@ -122,8 +124,10 @@ function CreateExpenseForm({ setCloseModal }) {
                 </SelectTrigger>
                 <SelectContent className="z-9999">
                   <SelectGroup>
-                    {categories?.data?.map(c => (
-                      <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
+                    {categories?.data?.map((c) => (
+                      <SelectItem key={c.id} value={c.id}>
+                        {c.name}
+                      </SelectItem>
                     ))}
                   </SelectGroup>
                 </SelectContent>
@@ -132,7 +136,11 @@ function CreateExpenseForm({ setCloseModal }) {
           </FieldGroup>
         </div>
         <div className="mt-4 py-5 border-t text-right px-4 space-x-2 border-gray-300">
-          <Button onClick={setCloseModal} variant="outline" className={"py-5 min-h-7.5"}>
+          <Button
+            onClick={setCloseModal}
+            variant="outline"
+            className={"py-5 min-h-7.5"}
+          >
             Cancel
           </Button>
           <Button onClick={handleSaveExpense} className={"py-5 w-30 min-h-7.5"}>

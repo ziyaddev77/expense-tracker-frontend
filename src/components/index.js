@@ -18,3 +18,4 @@ export { default as AppLayout } from "./layout/AppLayout";
 export {default as SetBudgetModal} from "./features/budgets/SetBudgetModal";
 export { default as BudgetLimitSkeleton } from "./features/budgets/BudgetLimitSkeleton";
 export { default as BudgetPageSkeleton } from "./features/budgets/BudgetPageSkeleton";
+export {default as NotFound} from "./features/NotFound";

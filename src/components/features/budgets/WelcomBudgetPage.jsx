@@ -135,9 +135,6 @@ function WelcomBudgetPage() {
             </div>
             <div className="flex flex-col mt-5 gap-2">
               <Button onClick={handleSaveBudget} className={"py-5"}>Save and Continue</Button>
-              <Button className={"py-5"} variant="ghost">
-                Cancel setup
-              </Button>
             </div>
           </div>
         )}

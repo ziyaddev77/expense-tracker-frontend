@@ -87,7 +87,7 @@ function SideBar({ isOpen, isMobile, setCloseSidebar }) {
             <LogOut size={19} className={`${!isOpen ? 'absolute left-7' : ''} mr-2`} />
 
             <span
-              className={`transition-all duration-300 delay-75 overflow-hidden whitespace-nowrap ${
+              className={`transition-[opacity,transform,margin] duration-300 delay-75 overflow-hidden whitespace-nowrap ${
                 isOpen ? "opacity-100 ml-1" : "opacity-0 -translate-x-2"
               }`}
             >

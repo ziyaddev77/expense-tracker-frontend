@@ -1,4 +1,4 @@
-import { CircleAlert, Plus, Trash } from "lucide-react";
+import { CircleAlert, Plus, Trash,FolderOpen } from "lucide-react";
 import { useState } from "react";
 import {
   BaseModal,
@@ -52,6 +52,13 @@ function Categories() {
       {/* categries content */}
       {isLoading ? (
         <CategoriesSkeleton />
+      ) : !data?.data?.length ? (
+        <div className="flex flex-col items-center justify-center py-16 ">
+          <div className="rounded w-full p-10 flex flex-col items-center gap-3">
+            <FolderOpen className="w-10 h-10 text-gray-300" />
+            <p className="text-gray-400 text-sm">No categories found</p>
+          </div>
+        </div>
       ) : (
         <div className="grid grid-cols-1 py-9 border-b border-gray-300/50 md:grid-cols-2 lg:grid-cols-3 gap-8 ">
           {data?.data?.map((category) => {

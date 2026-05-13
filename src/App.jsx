@@ -1,6 +1,6 @@
 import { Toaster } from "react-hot-toast";
 import { Navigate, Route, Routes } from "react-router-dom";
-import { AppLayout } from "./components";
+import { AppLayout, NotFound } from "./components";
 import {
   Budgets,
   Categories,
@@ -35,6 +35,10 @@ function App() {
             <Route path="budgets" element={<Budgets />} />
           </Route>
         </Route>
+  
+        {/* 404 page */}
+        <Route path="*" element={<NotFound />}/>
+        
       </Routes>
     </>
   );
