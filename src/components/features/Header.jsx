@@ -52,7 +52,7 @@ function Header() {
   }, []);
 
   return (
-    <header className="flex min-h-14 items-center justify-end px-7">
+    <header className="flex min-h-14 relative items-center justify-end px-7">
       <div className="relative" ref={profileRef}>
         <button
           type="button"

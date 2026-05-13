@@ -67,7 +67,7 @@ function Dashboard() {
             Take control of your finances by setting a monthly limit. We'll help you track  every expense.
           </NoBudgetSet>
         ) : (
-          <div className="rounded-md ring w-90 md:w-150 space-y-7 ring-gray-400/70 shadow p-5 flex-1">
+          <div className="rounded-md bg-accent ring w-90 md:w-150 space-y-7 ring-gray-400/70 shadow p-5 flex-1">
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-xl font-semibold">
@@ -128,7 +128,7 @@ function Dashboard() {
         )}
         {/* ==== status ==== */}
         {/* top categories */}
-        <div className="rounded-md ring ring-gray-400/70 w-80 shadow p-5">
+        <div className="rounded-md bg-white max-lg:w-full ring ring-gray-400/70 lg:w-85 shadow p-5">
           <h1 className="text-xl font-semibold">Top Categories</h1>
           {data?.top_categories?.length ? (
           <div className="space-y-1">

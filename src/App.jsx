@@ -22,7 +22,7 @@ function App() {
         <Route element={<GuestRoute />}>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/welcom" element={<Landing />} />
+          <Route path="/welcome" element={<Landing />} />
         </Route>
 
         {/* protected routes */}

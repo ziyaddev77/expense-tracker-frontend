@@ -71,7 +71,7 @@ const WeeklyActivityChart = () => {
   }, [data]);
 
   return (
-    <div className="bg-white lg:flex-1 w-90 md:w-140 rounded-2xl p-4 shadow-sm">
+    <div className="bg-white max-md:w-full lg:flex-1 w-90 md:w-140 rounded-2xl p-4 shadow-sm">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-base font-semibold text-gray-800">

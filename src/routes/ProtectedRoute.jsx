@@ -9,7 +9,7 @@ function ProtectedRoute() {
   if (isLoading) return <Loading />
 
   if (!isAuthenticated) {
-    return <Navigate to="/welcom" state={{ from: location }} replace />;
+    return <Navigate to="/welcome" state={{ from: location }} replace />;
   }
 
   return <Outlet />;

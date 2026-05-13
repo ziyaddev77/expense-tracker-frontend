@@ -28,7 +28,7 @@ const RecentExpenseItem = ({ expense }) => {
           <Icon size={20} style={{ color: iconData.color }} />
         </div>
         <div>
-          <p className="font-medium text-gray-800 truncate max-w-[180px]">
+          <p className="font-medium text-gray-800 truncate max-w-45">
             {expense.description}
           </p>
           <p className="text-xs text-gray-400">
@@ -38,7 +38,7 @@ const RecentExpenseItem = ({ expense }) => {
       </div>
 
       {/* Amount */}
-      <span className="font-semibold text-red-500">
+      <span className="font-semibold text-sm text-red-500">
         -${parseFloat(expense.amount).toFixed(2)}
       </span>
     </div>
@@ -47,7 +47,7 @@ const RecentExpenseItem = ({ expense }) => {
 
 const RecentExpenses = ({ expenses, onViewAll }) => {
   return (
-    <div className="bg-white rounded-2xl p-4 shadow-sm">
+    <div className="bg-white rounded-2xl max-lg:w-full w-85 p-4 shadow-sm">
       {/* Header */}
       <div className="flex items-center justify-between mb-2">
         <h2 className="text-lg font-semibold text-gray-800">Recent Expenses</h2>
@@ -60,7 +60,7 @@ const RecentExpenses = ({ expenses, onViewAll }) => {
       </div>
 
       {/* List */}
-      {expenses.length === 0 ? (
+      {expenses?.length === 0 ? (
         <p className="text-sm text-gray-400 text-center py-6">No expenses yet</p>
       ) : (
         expenses.map((expense) => (
