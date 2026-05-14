@@ -57,10 +57,9 @@ function SideBar({ isOpen, isMobile, setCloseSidebar }) {
               to={`/${label}`}
               className={({ isActive }) =>
                 `${
-                  
                   isActive
-                    ? "bg-[#F3F4F5] transition-all duration-300 ease-in-out color-text-main border-r-3 border-green-900 "
-                    : "bg-white text-gray-500 items-center hover:bg-[#F3F4F5] transition-all duration-300 ease-in-out"
+                    ? "bg-[#F3F4F5] color-text-main border-r-3 border-green-900 "
+                    : "bg-white text-gray-500 items-center hover:bg-[#F3F4F5]"
                 } capitalize font-semibold flex items-center gap-2 h-13 pl-4 rounded`
               }
               onClick={() => {
@@ -68,7 +67,9 @@ function SideBar({ isOpen, isMobile, setCloseSidebar }) {
               }}
               end
             >
-              <span><Icon size={20} /></span>
+              <span>
+                <Icon size={20} />
+              </span>
               <span
                 className={`overflow-hidden whitespace-nowrap transition-opacity duration-200 ${
                   isOpen ? "opacity-100 ml-2" : "opacity-0 ml-0"
@@ -84,7 +85,10 @@ function SideBar({ isOpen, isMobile, setCloseSidebar }) {
             onClick={handleLogout}
             className="flex items-center justify-center relative cursor-pointer hover:text-red-500"
           >
-            <LogOut size={19} className={`${!isOpen ? 'absolute left-7' : ''} mr-2`} />
+            <LogOut
+              size={19}
+              className={`${!isOpen ? "absolute left-7" : ""} mr-2`}
+            />
 
             <span
               className={`transition-[opacity,transform,margin] duration-300 delay-75 overflow-hidden whitespace-nowrap ${

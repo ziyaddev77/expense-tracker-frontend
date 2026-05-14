@@ -104,7 +104,7 @@ function Dashboard() {
                 <span className="text-sm text-gray-600/70 font-semibold">
                   REMAINING
                 </span>
-                <span className="font-bold text-green-600">
+                <span className={`font-bold ${data?.remaining < 0 ? 'text-red-600' : 'text-green-600'}`}>
                   {data?.remaining} DH
                 </span>
               </div>

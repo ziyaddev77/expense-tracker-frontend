@@ -32,7 +32,7 @@ export function useEditBudget() {
   const queryClient = useQueryClient();
 
   const { mutate: editBudgetMutation, isPending } = useMutation({
-    mutationFn: ({ id, data }) => budgetService.update(id, data),
+    mutationFn: ({ id, data }) => {budgetService.update(id, data), console.log(id,data)},
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["budgets"] });
       queryClient.invalidateQueries({ queryKey: ["dashboard"] });
